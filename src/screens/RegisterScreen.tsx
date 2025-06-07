@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Platform } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import { registerUser } from '../services/authService';
 import { Picker } from '@react-native-picker/picker';
@@ -8,14 +8,18 @@ export default function RegisterScreen({ navigation }) {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [perfil, setPerfil] = useState<'INVESTIDOR' | 'ASSESSOR'>('INVESTIDOR');
+  const [perfil, setPerfil] = useState('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleRegister = async () => {
     const newErrors: { [key: string]: string } = {};
 
     if (!nome.trim()) newErrors.nome = 'O nome é obrigatório.';
-    if (!email.includes('@')) newErrors.email = 'Formato de e-mail inválido.';
+    if (!email.trim()) {
+      newErrors.email = 'O e-mail é obrigatório.';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = 'Formato de e-mail inválido.';
+    }
     if (!senha) newErrors.senha = 'A senha é obrigatória.';
     if (!perfil) newErrors.perfil = 'O perfil é obrigatório.';
 
@@ -25,7 +29,7 @@ export default function RegisterScreen({ navigation }) {
     }
 
     setErrors({});
-    const success = await registerUser(nome, email, senha, perfil);
+    const success = await registerUser(nome, email, senha, perfil as 'INVESTIDOR' | 'ASSESSOR');
     if (success) {
       navigation.goBack();
     } else {
@@ -39,44 +43,54 @@ export default function RegisterScreen({ navigation }) {
         <Text style={styles.header}>Criar Conta</Text>
 
         <TextInput
-          style={styles.input}
+          style={[styles.input, errors.nome && styles.inputError]}
           placeholder="Nome"
           value={nome}
           onChangeText={setNome}
         />
-        {errors.nome && <Text style={styles.error}>{errors.nome}</Text>}
 
         <TextInput
-          style={styles.input}
+          style={[styles.input, errors.email && styles.inputError]}
           placeholder="E-mail"
           autoCapitalize="none"
           keyboardType="email-address"
           value={email}
           onChangeText={setEmail}
         />
-        {errors.email && <Text style={styles.error}>{errors.email}</Text>}
 
         <TextInput
-          style={styles.input}
+          style={[styles.input, errors.senha && styles.inputError]}
           placeholder="Senha"
           secureTextEntry
           value={senha}
           onChangeText={setSenha}
         />
-        {errors.senha && <Text style={styles.error}>{errors.senha}</Text>}
 
         <Text style={styles.label}>Perfil</Text>
-        <Picker
-          selectedValue={perfil}
-          style={styles.input}
-          onValueChange={(itemValue) => setPerfil(itemValue)}
+        <View
+          style={[
+            styles.pickerWrapper,
+            errors.perfil && styles.inputError
+          ]}
         >
-          <Picker.Item label="Investidor" value="INVESTIDOR" />
-          <Picker.Item label="Assessor" value="ASSESSOR" />
-        </Picker>
-        {errors.perfil && <Text style={styles.error}>{errors.perfil}</Text>}
+          <Picker
+            selectedValue={perfil}
+            onValueChange={(itemValue) => setPerfil(itemValue)}
+            style={Platform.OS === 'ios' ? styles.pickerIOS : undefined}
+          >
+            <Picker.Item label="Selecione o perfil" value="" enabled={false} />
+            <Picker.Item label="Investidor" value="INVESTIDOR" />
+            <Picker.Item label="Assessor" value="ASSESSOR" />
+          </Picker>
+        </View>
 
-        {errors.geral && <Text style={styles.error}>{errors.geral}</Text>}
+        {Object.values(errors).length > 0 && (
+          <View style={styles.errorGroupBox}>
+            {Object.entries(errors).map(([key, msg]) => (
+              <Text key={key} style={styles.errorText}>• {msg}</Text>
+            ))}
+          </View>
+        )}
 
         <CustomButton title="Cadastrar" onPress={handleRegister} />
       </View>
@@ -103,19 +117,41 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     padding: 12,
-    marginBottom: 12,
+    marginBottom: 6,
     borderRadius: 8,
     backgroundColor: '#f9f9f9',
+  },
+  inputError: {
+    borderColor: '#cc0000',
+    backgroundColor: '#fff6f6',
   },
   label: {
     marginTop: 8,
     marginBottom: 4,
     fontWeight: '600',
   },
-  error: {
-    color: 'red',
-    fontSize: 13,
-    marginBottom: 8,
-    textAlign: 'left',
+  pickerWrapper: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    marginBottom: 6,
+    overflow: 'hidden',
+    backgroundColor: '#f9f9f9',
   },
+  pickerIOS: {
+    height: 120,
+  },
+  errorGroupBox: {
+    backgroundColor: '#ffe6e6',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#ffcccc',
+  },
+  errorText: {
+    color: '#cc0000',
+    fontSize: 13,
+    marginBottom: 4,
+  }
 });

@@ -7,17 +7,34 @@ import { useAuth } from '../context/AuthContext';
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const { login } = useAuth();
 
   const handleLogin = async () => {
-    setError('');
+    const newErrors: { [key: string]: string } = {};
+
+    if (!email.trim()) {
+      newErrors.email = 'O e-mail é obrigatório.';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = 'Formato de e-mail inválido.';
+    }
+
+    if (!senha.trim()) {
+      newErrors.senha = 'A senha é obrigatória.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
     const success = await loginUser(email, senha);
     if (success) {
       login();
     } else {
-      setError('Credenciais inválidas. Verifique e tente novamente.');
+      setErrors({ geral: 'Credenciais inválidas. Verifique e tente novamente.' });
     }
   };
 
@@ -27,7 +44,7 @@ export default function LoginScreen({ navigation }) {
         <Text style={styles.header}>Entrar</Text>
 
         <TextInput
-          style={styles.input}
+          style={[styles.input, errors.email && styles.inputError]}
           placeholder="E-mail"
           autoCapitalize="none"
           keyboardType="email-address"
@@ -36,14 +53,20 @@ export default function LoginScreen({ navigation }) {
         />
 
         <TextInput
-          style={styles.input}
+          style={[styles.input, errors.senha && styles.inputError]}
           placeholder="Senha"
           secureTextEntry
           value={senha}
           onChangeText={setSenha}
         />
 
-        {error !== '' && <Text style={styles.error}>{error}</Text>}
+        {Object.values(errors).length > 0 && (
+          <View style={styles.errorBox}>
+            {Object.entries(errors).map(([key, msg]) => (
+              <Text key={key} style={styles.errorText}>• {msg}</Text>
+            ))}
+          </View>
+        )}
 
         <CustomButton title="Entrar" onPress={handleLogin} />
         <CustomButton title="Criar conta" onPress={() => navigation.navigate('Register')} />
@@ -71,14 +94,25 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     padding: 12,
-    marginBottom: 12,
+    marginBottom: 6,
     borderRadius: 8,
     backgroundColor: '#f9f9f9',
   },
-  error: {
-    color: 'red',
-    fontSize: 13,
-    marginBottom: 12,
-    textAlign: 'center',
+  inputError: {
+    borderColor: '#cc0000',
+    backgroundColor: '#fff6f6',
   },
+  errorBox: {
+    backgroundColor: '#ffe6e6',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#ffcccc',
+  },
+  errorText: {
+    color: '#cc0000',
+    fontSize: 13,
+    marginBottom: 4,
+  }
 });
