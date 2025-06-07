@@ -1,21 +1,35 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert, Picker } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import { registerUser } from '../services/authService';
+import { Picker } from '@react-native-picker/picker';
 
 export default function RegisterScreen({ navigation }) {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [perfil, setPerfil] = useState<'INVESTIDOR' | 'ASSESSOR'>('INVESTIDOR');
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const handleRegister = async () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!nome.trim()) newErrors.nome = 'O nome é obrigatório.';
+    if (!email.includes('@')) newErrors.email = 'Formato de e-mail inválido.';
+    if (!senha) newErrors.senha = 'A senha é obrigatória.';
+    if (!perfil) newErrors.perfil = 'O perfil é obrigatório.';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
     const success = await registerUser(nome, email, senha, perfil);
     if (success) {
-      Alert.alert('Sucesso', 'Cadastro realizado');
       navigation.goBack();
     } else {
-      Alert.alert('Erro', 'Falha ao cadastrar');
+      setErrors({ geral: 'Falha ao cadastrar. Verifique os dados ou tente novamente.' });
     }
   };
 
@@ -30,6 +44,7 @@ export default function RegisterScreen({ navigation }) {
           value={nome}
           onChangeText={setNome}
         />
+        {errors.nome && <Text style={styles.error}>{errors.nome}</Text>}
 
         <TextInput
           style={styles.input}
@@ -39,6 +54,7 @@ export default function RegisterScreen({ navigation }) {
           value={email}
           onChangeText={setEmail}
         />
+        {errors.email && <Text style={styles.error}>{errors.email}</Text>}
 
         <TextInput
           style={styles.input}
@@ -47,6 +63,7 @@ export default function RegisterScreen({ navigation }) {
           value={senha}
           onChangeText={setSenha}
         />
+        {errors.senha && <Text style={styles.error}>{errors.senha}</Text>}
 
         <Text style={styles.label}>Perfil</Text>
         <Picker
@@ -57,6 +74,9 @@ export default function RegisterScreen({ navigation }) {
           <Picker.Item label="Investidor" value="INVESTIDOR" />
           <Picker.Item label="Assessor" value="ASSESSOR" />
         </Picker>
+        {errors.perfil && <Text style={styles.error}>{errors.perfil}</Text>}
+
+        {errors.geral && <Text style={styles.error}>{errors.geral}</Text>}
 
         <CustomButton title="Cadastrar" onPress={handleRegister} />
       </View>
@@ -90,6 +110,12 @@ const styles = StyleSheet.create({
   label: {
     marginTop: 8,
     marginBottom: 4,
-    fontWeight: '600'
-  }
+    fontWeight: '600',
+  },
+  error: {
+    color: 'red',
+    fontSize: 13,
+    marginBottom: 8,
+    textAlign: 'left',
+  },
 });

@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import { loginUser } from '../services/authService';
 import { useAuth } from '../context/AuthContext';
@@ -8,14 +7,17 @@ import { useAuth } from '../context/AuthContext';
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [error, setError] = useState('');
+
   const { login } = useAuth();
 
   const handleLogin = async () => {
+    setError('');
     const success = await loginUser(email, senha);
     if (success) {
       login();
     } else {
-      Alert.alert('Erro', 'Credenciais inválidas');
+      setError('Credenciais inválidas. Verifique e tente novamente.');
     }
   };
 
@@ -23,6 +25,7 @@ export default function LoginScreen({ navigation }) {
     <View style={styles.container}>
       <View style={styles.card}>
         <Text style={styles.header}>Entrar</Text>
+
         <TextInput
           style={styles.input}
           placeholder="E-mail"
@@ -31,6 +34,7 @@ export default function LoginScreen({ navigation }) {
           value={email}
           onChangeText={setEmail}
         />
+
         <TextInput
           style={styles.input}
           placeholder="Senha"
@@ -38,6 +42,9 @@ export default function LoginScreen({ navigation }) {
           value={senha}
           onChangeText={setSenha}
         />
+
+        {error !== '' && <Text style={styles.error}>{error}</Text>}
+
         <CustomButton title="Entrar" onPress={handleLogin} />
         <CustomButton title="Criar conta" onPress={() => navigation.navigate('Register')} />
       </View>
@@ -67,5 +74,11 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderRadius: 8,
     backgroundColor: '#f9f9f9',
+  },
+  error: {
+    color: 'red',
+    fontSize: 13,
+    marginBottom: 12,
+    textAlign: 'center',
   },
 });
