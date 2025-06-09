@@ -30,11 +30,11 @@ export default function LoginScreen({ navigation }) {
     }
 
     setErrors({});
-    const success = await loginUser(email, senha);
-    if (success) {
-      login();
+    const result = await loginUser(email, senha);
+    if (result.success && result.perfil) {
+      login(result.perfil);
     } else {
-      setErrors({ geral: 'Credenciais inválidas. Verifique e tente novamente.' });
+      setErrors({ geral: 'Credenciais inválidas ou perfil não encontrado.' });
     }
   };
 

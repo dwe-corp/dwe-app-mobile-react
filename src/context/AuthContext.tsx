@@ -5,35 +5,49 @@ import { getToken, logoutUser } from '../services/authService';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: () => void;
+  userProfile: 'INVESTIDOR' | 'ASSESSOR' | null;
+  login: (profile: 'INVESTIDOR' | 'ASSESSOR') => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
+  userProfile: null,
   login: () => {},
   logout: () => {},
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userProfile, setUserProfile] = useState<'INVESTIDOR' | 'ASSESSOR' | null>(null);
 
   useEffect(() => {
-    const checkToken = async () => {
-      const token = await getToken();
+    const loadData = async () => {
+      const token = await AsyncStorage.getItem('token');
+      const profile = await AsyncStorage.getItem('profile');
       setIsAuthenticated(!!token);
+      if (profile === 'INVESTIDOR' || profile === 'ASSESSOR') {
+        setUserProfile(profile);
+      }
     };
-    checkToken();
+    loadData();
   }, []);
 
-  const login = () => setIsAuthenticated(true);
+  const login = async (profile: 'INVESTIDOR' | 'ASSESSOR') => {
+    await AsyncStorage.setItem('profile', profile);
+    setUserProfile(profile);
+    setIsAuthenticated(true);
+  };
+
   const logout = async () => {
-    await logoutUser();
+    await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('profile');
     setIsAuthenticated(false);
+    setUserProfile(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, userProfile, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
