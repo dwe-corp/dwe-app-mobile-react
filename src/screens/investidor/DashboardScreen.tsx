@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
 
-export default function DashboardScreen({ navigation }) {
+export default function DashboardScreen() {
   const { logout, userName } = useAuth();
+  const navigation = useNavigation();
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -24,40 +26,46 @@ export default function DashboardScreen({ navigation }) {
       title: 'Atualizações de Mercado',
       desc: 'Receba boletins semanais com as principais tendências.',
       button: 'Ler Agora',
+      route: 'Atualizacoes',
     },
     {
       title: 'Teste de Perfil',
       desc: 'Descubra seu perfil de investidor e receba recomendações.',
       button: 'Iniciar Teste',
+      route: 'PerfilInvestidor',
     },
     {
       title: 'Investimentos',
       desc: 'Explore opções de fundos com explicações simples.',
       button: 'Ver Fundos',
+      route: 'Fundos',
     },
     {
       title: 'Assistente com IA',
       desc: 'Receba suporte inteligente para decisões de investimento.',
       button: 'Conversar Agora',
+      route: 'IA',
     },
   ];
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-    <View style={styles.topBar}>
-      <Text style={styles.header}>Olá, {userName || 'Investidor'}</Text>
-      <TouchableOpacity onPress={logout}>
-        <Text style={styles.logout}>Sair</Text>
-      </TouchableOpacity>
-    </View>
-
+      <View style={styles.topBar}>
+        <Text style={styles.header}>Olá, {userName || 'Investidor'}</Text>
+        <TouchableOpacity onPress={logout}>
+          <Text style={styles.logout}>Sair</Text>
+        </TouchableOpacity>
+      </View>
 
       <View style={styles.grid}>
         {cards.map((item, idx) => (
           <View key={idx} style={styles.card}>
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.desc}>{item.desc}</Text>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate(item.route)}
+            >
               <Text style={styles.buttonText}>{item.button}</Text>
             </TouchableOpacity>
           </View>
@@ -98,8 +106,8 @@ const styles = StyleSheet.create({
     marginRight: CARD_GAP / 2,
     marginLeft: CARD_GAP / 2,
     minHeight: 160,
-    alignItems: 'center',      // centraliza horizontal
-    justifyContent: 'center',  // centraliza vertical
+    alignItems: 'center',
+    justifyContent: 'center',
     shadowColor: '#000',
     shadowOpacity: 0.06,
     shadowOffset: { width: 0, height: 2 },
@@ -144,5 +152,4 @@ const styles = StyleSheet.create({
     color: '#007AFF',
     fontWeight: 'bold',
   }
-  
 });

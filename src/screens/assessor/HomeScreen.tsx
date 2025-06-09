@@ -1,30 +1,36 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
 
 export default function HomeScreen() {
   const { logout, userName } = useAuth();
+  const navigation = useNavigation(); // <-- necessário para navegação funcionar
 
   const cards = [
     {
       title: 'Relatórios de Clientes',
       desc: 'Acesse relatórios completos dos portfólios dos seus clientes, incluindo performance, alocação e risco.',
       button: 'Ver Relatórios',
+      route: 'Relatorios'
     },
     {
       title: 'Ferramentas de Simulação',
       desc: 'Simule diferentes carteiras para mostrar aos seus clientes os possíveis cenários de retorno.',
       button: 'Simular Carteira',
+      route: 'Simulador'
     },
     {
       title: 'Lembretes Inteligentes',
       desc: 'Programe lembretes para reuniões, revisões de carteira e datas importantes.',
       button: 'Verificar Lembretes',
+      route: 'Lembretes'
     },
     {
       title: 'Suporte ao Cliente',
       desc: 'Acompanhe o atendimento e envie mensagens personalizadas para seus clientes.',
       button: 'Abrir Chat',
+      route: 'Chat'
     },
   ];
 
@@ -42,7 +48,10 @@ export default function HomeScreen() {
           <View key={idx} style={styles.card}>
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.desc}>{item.desc}</Text>
-            <TouchableOpacity style={styles.cardButton}>
+            <TouchableOpacity
+              style={styles.cardButton}
+              onPress={() => navigation.navigate(item.route)}
+            >
               <Text style={styles.cardButtonText}>{item.button}</Text>
             </TouchableOpacity>
           </View>
