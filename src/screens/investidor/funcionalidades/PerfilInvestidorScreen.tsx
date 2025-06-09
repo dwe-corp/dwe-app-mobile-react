@@ -234,12 +234,15 @@ const perguntas = [
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-        <Text style={styles.backText}>← Voltar</Text>
-      </TouchableOpacity>
+      {/* Botão de Voltar fixo no topo */}
+      {paginaAtual === 0 && (
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Text style={styles.backText}>← Voltar</Text>
+        </TouchableOpacity>
+      )}
 
       <ScrollView
-        ref={scrollViewRef} // Referência para o ScrollView
+        ref={scrollViewRef}
         contentContainerStyle={styles.content}
       >
         {perguntas.slice(inicio, fim).map((pergunta, index) => {
@@ -249,17 +252,27 @@ const perguntas = [
               key={perguntaIndex}
               style={[
                 styles.perguntaContainer,
-                erros[perguntaIndex] && styles.perguntaErro, // Aplica borda vermelha se houver erro
+                erros[perguntaIndex] && styles.perguntaErro,
               ]}
             >
               <Text style={styles.perguntaTitulo}>{pergunta.titulo}</Text>
               {pergunta.opcoes.map((opcao, idx) => (
                 <TouchableOpacity
                   key={idx}
-                  style={[styles.opcaoButton, respostas[perguntaIndex] === opcao.charAt(0) && styles.opcaoSelecionada]}
+                  style={[
+                    styles.opcaoButton,
+                    respostas[perguntaIndex] === opcao.charAt(0) && styles.opcaoSelecionada,
+                  ]}
                   onPress={() => handleSelecionar(perguntaIndex, opcao)}
                 >
-                  <Text style={[styles.opcaoTexto, respostas[perguntaIndex] === opcao.charAt(0) && styles.opcaoTextoSelecionado]}>{opcao}</Text>
+                  <Text
+                    style={[
+                      styles.opcaoTexto,
+                      respostas[perguntaIndex] === opcao.charAt(0) && styles.opcaoTextoSelecionado,
+                    ]}
+                  >
+                    {opcao}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -293,7 +306,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: Platform.OS === 'web' ? 16 : 40,
     left: 20,
-    zIndex: 10,
+    zIndex: 20,
+    backgroundColor: '#f8f8f8',
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 2,
   },
   backText: {
     color: '#007AFF',
