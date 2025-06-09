@@ -1,27 +1,67 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { useAuth } from '../../context/AuthContext'; // certifique-se que o caminho está correto
+import { useAuth } from '../../context/AuthContext';
 
-export default function DashboardScreen() {
+export default function DashboardScreen({ navigation }) {
   const { logout } = useAuth();
 
-  const recomendacoes = [
-    'Oi, Você é um Investidor.'
-  ];
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity onPress={logout} style={{ marginRight: 16 }}>
+            <Text style={{ color: '#007bff', fontWeight: 'bold' }}>Sair</Text>
+          </TouchableOpacity>
+        ),
+      });
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.header}>Boas Práticas em Casos de Falta de Energia</Text>
+      <Text style={styles.header}>Olá, Investidor</Text>
 
-      <View style={styles.card}>
-        {recomendacoes.map((item, idx) => (
-          <Text key={idx} style={styles.item}>{item}</Text>
-        ))}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Atualizações de Mercado</Text>
+        <Text style={styles.sectionDesc}>
+          Fique por dentro das últimas tendências e oportunidades com nosso boletim semanal.
+        </Text>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Ler Agora</Text>
+        </TouchableOpacity>
       </View>
 
-      <TouchableOpacity onPress={logout} style={styles.logoutButton}>
-        <Text style={styles.logoutText}>Sair</Text>
-      </TouchableOpacity>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Teste de Perfil de Investidor</Text>
+        <Text style={styles.sectionDesc}>
+          Descubra seu estilo de investimento e receba recomendações personalizadas.
+        </Text>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Iniciar Teste</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Opções de Investimento</Text>
+        <Text style={styles.sectionDesc}>
+          Explore fundos acessíveis e com explicações simples para novos investidores.
+        </Text>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Ver Fundos</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Suporte com IA</Text>
+        <Text style={styles.sectionDesc}>
+          Receba recomendações de investimento com a ajuda da nossa assistente inteligente.
+        </Text>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Conversar Agora</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 }
@@ -29,39 +69,49 @@ export default function DashboardScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    flexGrow: 1,
-    backgroundColor: '#f2f2f2',
-    alignItems: 'center'
+    backgroundColor: '#f8f8f8',
+    flexGrow: 1
   },
   header: {
-    fontSize: 22,
-    fontWeight: 'bold',
+    fontSize: 24,
+    fontWeight: '700',
+    marginBottom: 20,
     textAlign: 'center',
-    marginBottom: 16
+    color: '#333'
   },
-  card: {
-    backgroundColor: '#ddd',
-    borderRadius: 12,
+  section: {
+    backgroundColor: '#fff',
     padding: 20,
-    elevation: 2,
-    width: '80%'
+    marginBottom: 16,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 6,
+    elevation: 3
   },
-  item: {
-    fontSize: 15,
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 8,
+    color: '#222'
+  },
+  sectionDesc: {
+    fontSize: 14,
+    color: '#666',
     marginBottom: 12,
-    textAlign: 'center',
-    lineHeight: 22
+    lineHeight: 20
   },
-  logoutButton: {
-    marginTop: 30,
-    backgroundColor: '#cc0000',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8
+  button: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignSelf: 'flex-start'
   },
-  logoutText: {
+  buttonText: {
     color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16
+    fontWeight: '600',
+    fontSize: 14
   }
 });
