@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 
 export default function DashboardScreen({ navigation }) {
@@ -19,99 +19,130 @@ export default function DashboardScreen({ navigation }) {
     return unsubscribe;
   }, [navigation]);
 
+  const cards = [
+    {
+      title: 'Atualizações de Mercado',
+      desc: 'Receba boletins semanais com as principais tendências.',
+      button: 'Ler Agora',
+    },
+    {
+      title: 'Teste de Perfil',
+      desc: 'Descubra seu perfil de investidor e receba recomendações.',
+      button: 'Iniciar Teste',
+    },
+    {
+      title: 'Investimentos',
+      desc: 'Explore opções de fundos com explicações simples.',
+      button: 'Ver Fundos',
+    },
+    {
+      title: 'Assistente com IA',
+      desc: 'Receba suporte inteligente para decisões de investimento.',
+      button: 'Conversar Agora',
+    },
+  ];
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.topBar}>
       <Text style={styles.header}>Olá, Investidor</Text>
+      <TouchableOpacity onPress={logout}>
+        <Text style={styles.logout}>Sair</Text>
+      </TouchableOpacity>
+    </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Atualizações de Mercado</Text>
-        <Text style={styles.sectionDesc}>
-          Fique por dentro das últimas tendências e oportunidades com nosso boletim semanal.
-        </Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Ler Agora</Text>
-        </TouchableOpacity>
-      </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Teste de Perfil de Investidor</Text>
-        <Text style={styles.sectionDesc}>
-          Descubra seu estilo de investimento e receba recomendações personalizadas.
-        </Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Iniciar Teste</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Opções de Investimento</Text>
-        <Text style={styles.sectionDesc}>
-          Explore fundos acessíveis e com explicações simples para novos investidores.
-        </Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Ver Fundos</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Suporte com IA</Text>
-        <Text style={styles.sectionDesc}>
-          Receba recomendações de investimento com a ajuda da nossa assistente inteligente.
-        </Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Conversar Agora</Text>
-        </TouchableOpacity>
+      <View style={styles.grid}>
+        {cards.map((item, idx) => (
+          <View key={idx} style={styles.card}>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.desc}>{item.desc}</Text>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>{item.button}</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
       </View>
     </ScrollView>
   );
 }
 
+const CARD_GAP = 16;
+
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingTop: 24,
+    paddingBottom: 40,
+    paddingHorizontal: 16,
     backgroundColor: '#f8f8f8',
-    flexGrow: 1
+    flexGrow: 1,
   },
   header: {
     fontSize: 24,
     fontWeight: '700',
-    marginBottom: 20,
+    marginBottom: 24,
     textAlign: 'center',
-    color: '#333'
+    color: '#222',
   },
-  section: {
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  card: {
+    flexBasis: '48%',
     backgroundColor: '#fff',
+    borderRadius: 16,
     padding: 20,
-    marginBottom: 16,
-    borderRadius: 12,
+    marginBottom: CARD_GAP,
+    marginRight: CARD_GAP / 2,
+    marginLeft: CARD_GAP / 2,
+    minHeight: 160,
+    alignItems: 'center',      // centraliza horizontal
+    justifyContent: 'center',  // centraliza vertical
     shadowColor: '#000',
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.06,
     shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    elevation: 3
+    shadowRadius: 4,
+    elevation: 2,
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+  title: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#111',
+    textAlign: 'center',
     marginBottom: 8,
-    color: '#222'
   },
-  sectionDesc: {
+  desc: {
     fontSize: 14,
-    color: '#666',
-    marginBottom: 12,
-    lineHeight: 20
+    color: '#555',
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 16,
+    maxWidth: 220,
   },
   button: {
     backgroundColor: '#007AFF',
-    paddingVertical: 10,
-    paddingHorizontal: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
     borderRadius: 8,
-    alignSelf: 'flex-start'
+    maxWidth: 180,
   },
   buttonText: {
     color: '#fff',
     fontWeight: '600',
-    fontSize: 14
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  logout: {
+    color: '#007AFF',
+    fontWeight: 'bold',
   }
+  
 });

@@ -3,8 +3,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
-import HomeScreen from './src/screens/assessor/HomeScreen';
-import DashboardScreen from './src/screens/investidor/DashboardScreen';
+import AssessorTabs from './src/navigation/AssessorTabs';
+import InvestorTabs from './src/navigation/InvestorTabs';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 
 const Stack = createNativeStackNavigator();
@@ -22,9 +22,9 @@ function AppRoutes() {
           <Stack.Screen name="Register" component={RegisterScreen} />
         </>
       ) : userProfile === 'INVESTIDOR' ? (
-        <Stack.Screen name="Dashboard" component={DashboardScreen} />
+        <Stack.Screen name="InvestorTabs" component={InvestorTabs} options={{ headerShown: false }} />
       ) : (
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="AssessorTabs" component={AssessorTabs} options={{ headerShown: false }} />
       )}
     </Stack.Navigator>
   );

@@ -1,107 +1,131 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 
-export default function HomeScreen({ navigation }) {
-  const { logout } = useAuth();
+export default function HomeScreen() {
+  const { logout, userName } = useAuth();
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      navigation.setOptions({
-        headerRight: () => (
-          <TouchableOpacity onPress={logout} style={{ marginRight: 16 }}>
-            <Text style={{ color: '#007bff', fontWeight: 'bold' }}>Sair</Text>
-          </TouchableOpacity>
-        ),
-      });
-    });
-
-    return unsubscribe;
-  }, [navigation]);
+  const cards = [
+    {
+      title: 'Relatórios de Clientes',
+      desc: 'Acesse relatórios completos dos portfólios dos seus clientes, incluindo performance, alocação e risco.',
+      button: 'Ver Relatórios',
+    },
+    {
+      title: 'Ferramentas de Simulação',
+      desc: 'Simule diferentes carteiras para mostrar aos seus clientes os possíveis cenários de retorno.',
+      button: 'Simular Carteira',
+    },
+    {
+      title: 'Lembretes Inteligentes',
+      desc: 'Programe lembretes para reuniões, revisões de carteira e datas importantes.',
+      button: 'verificar Lembretes',
+    },
+    {
+      title: 'Suporte ao Cliente',
+      desc: 'Acompanhe o atendimento e envie mensagens personalizadas para seus clientes.',
+      button: 'Abrir Chat',
+    },
+  ];
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.header}>Bem-vindo, Assessor</Text>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Relatórios de Clientes</Text>
-        <Text style={styles.sectionDesc}>
-          Acesse relatórios completos dos portfólios dos seus clientes, incluindo performance, alocação e risco.
-        </Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Ver Relatórios</Text>
+      <View style={styles.topBar}>
+        <Text style={styles.header}>Olá, {userName || 'Assessor'}</Text>
+        <TouchableOpacity onPress={logout}>
+          <Text style={styles.logout}>Sair</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Ferramentas de Simulação</Text>
-        <Text style={styles.sectionDesc}>
-          Simule diferentes carteiras para mostrar aos seus clientes os possíveis cenários de retorno.
-        </Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Simular Carteira</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Lembretes Inteligentes</Text>
-        <Text style={styles.sectionDesc}>
-          Programe lembretes para reuniões, revisões de carteira e datas importantes.
-        </Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Configurar Lembretes</Text>
-        </TouchableOpacity>
+      <View style={styles.grid}>
+        {cards.map((item, idx) => (
+          <View key={idx} style={styles.card}>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.desc}>{item.desc}</Text>
+            <TouchableOpacity style={styles.cardButton}>
+              <Text style={styles.cardButtonText}>{item.button}</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
       </View>
     </ScrollView>
   );
 }
 
+const CARD_GAP = 16;
+
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingTop: 24,
+    paddingBottom: 40,
+    paddingHorizontal: 16,
     backgroundColor: '#f8f8f8',
-    flexGrow: 1
+    flexGrow: 1,
+  },
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
   },
   header: {
     fontSize: 24,
     fontWeight: '700',
-    marginBottom: 20,
-    textAlign: 'center',
-    color: '#333'
+    color: '#222',
   },
-  section: {
-    backgroundColor: '#fff',
-    padding: 20,
-    marginBottom: 16,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    elevation: 3
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 8,
-    color: '#222'
-  },
-  sectionDesc: {
+  logout: {
+    color: '#007AFF',
+    fontWeight: 'bold',
     fontSize: 14,
-    color: '#666',
-    marginBottom: 12,
-    lineHeight: 20
   },
-  button: {
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  card: {
+    flexBasis: '48%',
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: CARD_GAP,
+    marginRight: CARD_GAP / 2,
+    marginLeft: CARD_GAP / 2,
+    minHeight: 160,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#111',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  desc: {
+    fontSize: 14,
+    color: '#555',
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 16,
+    maxWidth: 220,
+  },
+  cardButton: {
     backgroundColor: '#007AFF',
-    paddingVertical: 10,
-    paddingHorizontal: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 20,
     borderRadius: 8,
-    alignSelf: 'flex-start'
+    maxWidth: 180,
   },
-  buttonText: {
+  cardButtonText: {
     color: '#fff',
     fontWeight: '600',
-    fontSize: 14
+    fontSize: 14,
+    textAlign: 'center',
   }
 });
