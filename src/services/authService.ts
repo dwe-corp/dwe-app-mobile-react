@@ -2,7 +2,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_URL = 'http://192.168.0.211:8080';
+const API_URL = 'http://localhost:8080';
 
 export async function loginUser(email: string, senha: string): Promise<{ success: boolean, perfil?: 'INVESTIDOR' | 'ASSESSOR' }> {
   try {
