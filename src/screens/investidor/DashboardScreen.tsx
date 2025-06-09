@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from
 import { useAuth } from '../../context/AuthContext';
 
 export default function DashboardScreen({ navigation }) {
-  const { logout } = useAuth();
+  const { logout, userName } = useAuth();
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -45,7 +45,7 @@ export default function DashboardScreen({ navigation }) {
   return (
     <ScrollView contentContainerStyle={styles.container}>
     <View style={styles.topBar}>
-      <Text style={styles.header}>Olá, Investidor</Text>
+      <Text style={styles.header}>Olá, {userName || 'Investidor'}</Text>
       <TouchableOpacity onPress={logout}>
         <Text style={styles.logout}>Sair</Text>
       </TouchableOpacity>

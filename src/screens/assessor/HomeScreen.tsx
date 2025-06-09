@@ -19,7 +19,7 @@ export default function HomeScreen() {
     {
       title: 'Lembretes Inteligentes',
       desc: 'Programe lembretes para reuniões, revisões de carteira e datas importantes.',
-      button: 'verificar Lembretes',
+      button: 'Verificar Lembretes',
     },
     {
       title: 'Suporte ao Cliente',
