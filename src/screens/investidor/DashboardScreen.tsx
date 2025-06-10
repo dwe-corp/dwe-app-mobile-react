@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+  Dimensions,
+} from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { getUserRiskProfile } from '../../services/suitabilityService';
@@ -12,6 +20,9 @@ export default function DashboardScreen() {
 
   const [perfil, setPerfil] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const screenWidth = Dimensions.get('window').width;
+  const isMobile = screenWidth < 768;
 
   useEffect(() => {
     const fetchPerfil = async () => {
@@ -83,7 +94,7 @@ export default function DashboardScreen() {
   ];
 
   const perfilStyle = getPerfilStyle(perfil);
-
+    
   if (loading) {
     return (
       <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
@@ -92,23 +103,23 @@ export default function DashboardScreen() {
       </View>
     );
   }
-
+  
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={[styles.container, isMobile && styles.containerMobile]}>
       <View style={styles.topBar}>
-        <Text style={styles.header}>
-          Olá, {userName || 'Investidor'}
-        </Text>
+        <Text style={styles.header}>Olá, {userName || 'Investidor'}</Text>
 
         <View style={styles.rightButtons}>
           {perfil && (
-            <View style={[
-              styles.perfilBadge,
-              {
-                backgroundColor: perfilStyle.backgroundColor,
-                borderColor: perfilStyle.borderColor
-              }
-            ]}>
+            <View
+              style={[
+                styles.perfilBadge,
+                {
+                  backgroundColor: perfilStyle.backgroundColor,
+                  borderColor: perfilStyle.borderColor,
+                },
+              ]}
+            >
               <Text style={[styles.perfilText, { color: perfilStyle.color }]}>
                 Perfil: {perfil}
               </Text>
@@ -120,20 +131,30 @@ export default function DashboardScreen() {
         </View>
       </View>
 
-      <View style={styles.grid}>
-        {cards.map((item, idx) => (
-          <View key={idx} style={styles.card}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.desc}>{item.desc}</Text>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => navigation.navigate(item.route)}
+      {loading ? (
+        <ActivityIndicator size="large" color="#007AFF" style={{ marginTop: 40 }} />
+      ) : (
+        <View style={[styles.grid, isMobile && styles.gridMobile]}>
+          {cards.map((item, idx) => (
+            <View
+              key={idx}
+              style={[
+                styles.card,
+                isMobile ? styles.cardMobile : styles.cardWeb,
+              ]}
             >
-              <Text style={styles.buttonText}>{item.button}</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </View>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.desc}>{item.desc}</Text>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => navigation.navigate(item.route)}
+              >
+                <Text style={styles.buttonText}>{item.button}</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+      )}
     </ScrollView>
   );
 }
@@ -147,6 +168,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#f8f8f8',
     flexGrow: 1,
+  },
+  containerMobile: {
+    paddingHorizontal: 8,
   },
   topBar: {
     flexDirection: 'row',
@@ -197,14 +221,14 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
+  gridMobile: {
+    flexDirection: 'column',
+  },
   card: {
-    flexBasis: '48%',
     backgroundColor: '#fff',
     borderRadius: 16,
     padding: 20,
     marginBottom: CARD_GAP,
-    marginRight: CARD_GAP / 2,
-    marginLeft: CARD_GAP / 2,
     minHeight: 160,
     alignItems: 'center',
     justifyContent: 'center',
@@ -213,6 +237,14 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     elevation: 2,
+  },
+  cardWeb: {
+    flexBasis: '48%',
+    marginLeft: CARD_GAP / 2,
+    marginRight: CARD_GAP / 2,
+  },
+  cardMobile: {
+    width: '100%',
   },
   title: {
     fontSize: 16,

@@ -41,7 +41,7 @@ export default function LoginScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.header}>Entrar</Text>
+        <Text style={styles.header}>Bem-Vindo</Text>
 
         <TextInput
           style={[styles.input, errors.email && styles.inputError]}
