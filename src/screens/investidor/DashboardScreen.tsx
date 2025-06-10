@@ -68,16 +68,16 @@ export default function DashboardScreen() {
 
   const cards = [
     {
-      title: 'Atualizações de Mercado',
-      desc: 'Receba boletins semanais com as principais tendências.',
-      button: 'Ler Agora',
-      route: 'Atualizacoes',
-    },
-    {
       title: 'Teste de Perfil',
       desc: 'Descubra seu perfil de investidor e receba recomendações.',
       button: 'Iniciar Teste',
       route: 'PerfilInvestidor',
+    },
+    {
+      title: 'Atualizações de Mercado',
+      desc: 'Receba boletins semanais com as principais tendências.',
+      button: 'Ler Agora',
+      route: 'Atualizacoes',
     },
     {
       title: 'Investimentos',
@@ -103,7 +103,7 @@ export default function DashboardScreen() {
       </View>
     );
   }
-  
+
   return (
     <ScrollView contentContainerStyle={[styles.container, isMobile && styles.containerMobile]}>
       <View style={styles.topBar}>
