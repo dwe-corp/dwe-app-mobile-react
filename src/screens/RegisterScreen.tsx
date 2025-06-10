@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Platform } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import { registerUser } from '../services/authService';
-import { Picker } from '@react-native-picker/picker';
 
 export default function RegisterScreen({ navigation }) {
   const [nome, setNome] = useState('');
@@ -66,22 +65,31 @@ export default function RegisterScreen({ navigation }) {
           onChangeText={setSenha}
         />
 
-        <Text style={styles.label}>Perfil</Text>
-        <View
-          style={[
-            styles.pickerWrapper,
-            errors.perfil && styles.inputError
-          ]}
-        >
-          <Picker
-            selectedValue={perfil}
-            onValueChange={(itemValue) => setPerfil(itemValue)}
-            style={Platform.OS === 'ios' ? styles.pickerIOS : undefined}
+        
+        <View style={styles.perfilContainer}>
+          <TouchableOpacity
+            style={[
+              styles.perfilButton,
+              perfil === 'INVESTIDOR' && styles.perfilButtonSelected
+            ]}
+            onPress={() => setPerfil('INVESTIDOR')}
           >
-            <Picker.Item label="Selecione o perfil" value="" enabled={false} />
-            <Picker.Item label="Investidor" value="INVESTIDOR" />
-            <Picker.Item label="Assessor" value="ASSESSOR" />
-          </Picker>
+            <Text style={perfil === 'INVESTIDOR' ? styles.perfilTextSelected : styles.perfilText}>
+              Investidor
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.perfilButton,
+              perfil === 'ASSESSOR' && styles.perfilButtonSelected
+            ]}
+            onPress={() => setPerfil('ASSESSOR')}
+          >
+            <Text style={perfil === 'ASSESSOR' ? styles.perfilTextSelected : styles.perfilText}>
+              Assessor
+            </Text>
+          </TouchableOpacity>
         </View>
 
         {Object.values(errors).length > 0 && (
@@ -127,19 +135,35 @@ const styles = StyleSheet.create({
   },
   label: {
     marginTop: 8,
-    marginBottom: 4,
+    marginBottom: 6,
     fontWeight: '600',
   },
-  pickerWrapper: {
+  perfilContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  perfilButton: {
+    flex: 1,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 8,
-    marginBottom: 6,
-    overflow: 'hidden',
+    paddingVertical: 12,
+    marginHorizontal: 5,
     backgroundColor: '#f9f9f9',
+    alignItems: 'center',
   },
-  pickerIOS: {
-    height: 120,
+  perfilButtonSelected: {
+    backgroundColor: '#007AFF',
+    borderColor: '#007AFF',
+  },
+  perfilText: {
+    color: '#333',
+    fontWeight: '500',
+  },
+  perfilTextSelected: {
+    color: '#fff',
+    fontWeight: '600',
   },
   errorGroupBox: {
     backgroundColor: '#ffe6e6',
