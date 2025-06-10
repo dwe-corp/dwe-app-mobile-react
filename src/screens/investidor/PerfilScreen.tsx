@@ -1,10 +1,149 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
-export default function PerfilScreen() {
+export default function ProfileScreen() {
+  const { userName, userEmail, userProfile, logout } = useAuth();
+  const navigation = useNavigation();
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Página em construção</Text>
+    <View style={styles.container}>
+
+      <Image
+        source={require('../../assets/avatar.png')}
+        style={styles.avatar}
+      />
+
+
+      <Text style={styles.name}>{userName}</Text>
+      <Text style={styles.role}>{userProfile}</Text>
+
+      <View style={{ height: 1, backgroundColor: '#eee', marginVertical: 20, width: '100%' }} />
+
+      <View style={styles.optionBox}>
+        <Ionicons name="mail-outline" size={20} color="#333" style={styles.icon} />
+        <View>
+          <Text style={styles.optionLabel}>Email</Text>
+          <Text style={styles.optionValue}>{userEmail}</Text>
+        </View>
+      </View>
+
+      <TouchableOpacity
+        style={styles.optionButton}
+        onPress={() => navigation.navigate('ConfigConta')}
+      >
+        <Ionicons name="settings-outline" size={20} color="#333" style={styles.icon} />
+        <Text style={styles.optionText}>Configurações da Conta</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.optionButton}
+        onPress={() => navigation.navigate('FormularioCadastro')}
+      >
+        <Ionicons name="document-text-outline" size={20} color="#333" style={styles.icon} />
+        <Text style={styles.optionText}>Formulário de Cadastro</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.logoutButton} onPress={logout}>
+        <Text style={styles.logoutText}>Sair</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingTop: 60,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+  },
+  header: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 20,
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    alignSelf: 'center',
+    marginBottom: 12,
+    backgroundColor: '#f2f2f2',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  name: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#111',
+  },
+  role: {
+    textAlign: 'center',
+    fontSize: 14,
+    color: '#b5b5b5',
+    marginBottom: 24,
+    letterSpacing: 1,
+  },
+  optionBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f7f7f7',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 12,
+    width: '100%',
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  icon: {
+    marginRight: 12,
+  },
+  optionLabel: {
+    color: '#555',
+    fontSize: 14,
+  },
+  optionValue: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  optionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f7f7f7',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 12,
+    width: '100%',
+  },
+  optionText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#333',
+  },
+  logoutButton: {
+    backgroundColor: '#FFECEC',
+    borderRadius: 10,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginTop: 30,
+    width: '100%',
+  },
+  logoutText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#D9534F',
+  }
+});

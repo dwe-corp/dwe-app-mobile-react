@@ -125,9 +125,6 @@ export default function DashboardScreen() {
               </Text>
             </View>
           )}
-          <TouchableOpacity onPress={logout} style={styles.logoutButtonHeader}>
-            <Text style={styles.logoutText}>Sair</Text>
-          </TouchableOpacity>
         </View>
       </View>
 
