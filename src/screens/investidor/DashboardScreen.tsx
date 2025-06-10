@@ -52,8 +52,8 @@ export default function DashboardScreen() {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.topBar}>
         <Text style={styles.header}>Olá, {userName || 'Investidor'}</Text>
-        <TouchableOpacity onPress={logout}>
-          <Text style={styles.logout}>Sair</Text>
+        <TouchableOpacity onPress={logout} style={styles.logoutButton}>
+          <Text style={styles.logoutText}>Sair</Text>
         </TouchableOpacity>
       </View>
 
@@ -78,6 +78,22 @@ export default function DashboardScreen() {
 const CARD_GAP = 16;
 
 const styles = StyleSheet.create({
+  logoutButton: {
+  backgroundColor: '#E6F0FF',
+  paddingVertical: 8,
+  paddingHorizontal: 16,
+  borderRadius: 20,
+  shadowColor: '#000',
+  shadowOpacity: 0.08,
+  shadowOffset: { width: 0, height: 2 },
+  shadowRadius: 4,
+  elevation: 3,
+  },
+  logoutText: {
+    color: '#007AFF',
+    fontWeight: '600',
+    fontSize: 14,
+  },
   container: {
     paddingTop: 24,
     paddingBottom: 40,

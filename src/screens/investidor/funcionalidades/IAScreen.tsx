@@ -21,7 +21,7 @@ export default function IAScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === 'web' ? 24 : 48, // topo para web/mobile
+    paddingTop: Platform.OS === 'web' ? 24 : 48,
     paddingHorizontal: 20,
     backgroundColor: '#f8f8f8',
   },
@@ -30,11 +30,20 @@ const styles = StyleSheet.create({
     top: Platform.OS === 'web' ? 16 : 40,
     left: 20,
     zIndex: 10,
+    backgroundColor: '#E6F0FF',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 3,
   },
   backText: {
     color: '#007AFF',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
   content: {
     flex: 1,
