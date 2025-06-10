@@ -1,17 +1,32 @@
-import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { getUserRiskProfile } from '../../services/suitabilityService';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function DashboardScreen() {
-  const { logout, userName } = useAuth();
+  const { logout, userName, userEmail } = useAuth();
   const navigation = useNavigation();
-  const route = useRoute();
-  const perfil = route.params?.perfil;
+  const isFocused = useIsFocused();
 
-  console.log('Perfil recebido:', perfil);
+  const [perfil, setPerfil] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const getPerfilStyle = (perfil: string | undefined) => {
+  useEffect(() => {
+    const fetchPerfil = async () => {
+      if (!userEmail) return;
+
+      setLoading(true);
+      const perfilRisco = await getUserRiskProfile(userEmail);
+      setPerfil(perfilRisco);
+      setLoading(false);
+    };
+
+    fetchPerfil();
+  }, [userEmail, isFocused]);
+
+  const getPerfilStyle = (perfil: string | undefined | null) => {
     switch (perfil?.toUpperCase()) {
       case 'CONSERVADOR':
         return {
@@ -69,6 +84,15 @@ export default function DashboardScreen() {
 
   const perfilStyle = getPerfilStyle(perfil);
 
+  if (loading) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color="#007AFF" />
+        <Text style={{ marginTop: 12 }}>Carregando seu perfil...</Text>
+      </View>
+    );
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.topBar}>
@@ -80,7 +104,10 @@ export default function DashboardScreen() {
           {perfil && (
             <View style={[
               styles.perfilBadge,
-              { backgroundColor: perfilStyle.backgroundColor, borderColor: perfilStyle.borderColor }
+              {
+                backgroundColor: perfilStyle.backgroundColor,
+                borderColor: perfilStyle.borderColor
+              }
             ]}>
               <Text style={[styles.perfilText, { color: perfilStyle.color }]}>
                 Perfil: {perfil}

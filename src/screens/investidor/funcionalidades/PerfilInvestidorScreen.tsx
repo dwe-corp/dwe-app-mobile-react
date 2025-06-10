@@ -10,16 +10,18 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { registerUserSuitability } from '../../../services/suitabilityService';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function PerfilInvestidorScreen() {
   const navigation = useNavigation();
   const scrollViewRef = useRef(null);
+  const { userName, userEmail } = useAuth();
 
   const [respostas, setRespostas] = useState<{ [key: number]: string }>({});
   const [paginaAtual, setPaginaAtual] = useState(0);
   const [erros, setErros] = useState<{ [key: number]: boolean }>({});
 
-const perguntas = [
+  const perguntas = [
     {
       titulo: '1. Qual é seu principal objetivo com os investimentos?',
       opcoes: [
@@ -219,7 +221,14 @@ const perguntas = [
 
       console.log('Contagem das Respostas:', contagem);
 
+      if (!userName || !userEmail) {
+        Alert.alert('Erro', 'E-mail do usuário não encontrado. Faça login novamente.');
+        return;
+      }
+
       const resultado = await registerUserSuitability(
+        userName,
+        userEmail,
         contagem.A,
         contagem.B,
         contagem.C
@@ -229,7 +238,7 @@ const perguntas = [
 
       if (resultado.success) {
         Alert.alert('Sucesso', 'Seu perfil foi registrado com sucesso!');
-        navigation.navigate('Dashboard', { perfil: resultado.data.cliente.risco }); // altere para a rota desejada
+        navigation.navigate('Dashboard');
       } else {
         Alert.alert('Erro', 'Não foi possível registrar seu perfil. Tente novamente.');
       }

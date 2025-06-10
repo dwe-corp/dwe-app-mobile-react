@@ -1,12 +1,16 @@
 import api from './api';
 
 export const registerUserSuitability = async (
+  nome: string,
+  email: string,
   respostasConservadoras: number,
   respostasModeradas: number,
   respostasAgressivas: number,
 ): Promise<{ success: boolean; data?: any }> => {
   try {
     const payload = {
+      nome,
+      email,
       respostasConservadoras,
       respostasModeradas,
       respostasAgressivas,
@@ -25,5 +29,23 @@ export const registerUserSuitability = async (
       success: false,
       data: error.response?.data,
     };
+  }
+};
+
+export const getUserRiskProfile = async (email: string): Promise<string | null> => {
+  try {
+    const response = await api.get(`http://localhost:8082/suitability?email=${email}`);
+    console.log('Resposta da API de perfil de risco:', response.data);
+
+    // Corrigido: agora pega o primeiro cliente da lista
+    const primeiroCliente = response.data?.[0];
+    const risco = primeiroCliente?.risco;
+
+    console.log('Risco extraído:', risco);
+
+    return risco || null;
+  } catch (error: any) {
+    console.error('Erro ao buscar perfil de risco:', error.response?.data || error.message);
+    return null;
   }
 };

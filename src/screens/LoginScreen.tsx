@@ -32,7 +32,7 @@ export default function LoginScreen({ navigation }) {
     setErrors({});
     const result = await loginUser(email, senha);
     if (result.success && result.perfil) {
-      login(result.perfil);
+      login(result.perfil, result.nome, result.email);
     } else {
       setErrors({ geral: 'Credenciais inválidas ou perfil não encontrado.' });
     }
