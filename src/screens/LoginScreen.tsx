@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import { loginUser } from '../services/authService';
 import { useAuth } from '../context/AuthContext';
@@ -60,6 +60,10 @@ export default function LoginScreen({ navigation }) {
           onChangeText={setSenha}
         />
 
+        {/* <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+          <Text style={styles.linkRight}>Esqueceu a senha?</Text>
+        </TouchableOpacity> */}
+
         {Object.values(errors).length > 0 && (
           <View style={styles.errorBox}>
             {Object.entries(errors).map(([key, msg]) => (
@@ -69,14 +73,24 @@ export default function LoginScreen({ navigation }) {
         )}
 
         <CustomButton title="Entrar" onPress={handleLogin} />
-        <CustomButton title="Criar conta" onPress={() => navigation.navigate('Register')} />
+
+        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+          <Text style={styles.linkBottom}>
+            Primeira vez por aqui? <Text style={styles.linkHighlight}>Cadastre-se</Text>
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f2f2f2' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f2f2f2'
+  },
   card: {
     backgroundColor: '#fff',
     padding: 24,
@@ -89,7 +103,12 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 3,
   },
-  header: { fontSize: 24, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center'
+  },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
@@ -101,6 +120,22 @@ const styles = StyleSheet.create({
   inputError: {
     borderColor: '#cc0000',
     backgroundColor: '#fff6f6',
+  },
+  linkRight: {
+    alignSelf: 'flex-end',
+    color: '#007bff',
+    fontSize: 13,
+    marginBottom: 12,
+  },
+  linkBottom: {
+    marginTop: 16,
+    textAlign: 'center',
+    color: '#666',
+    fontSize: 14,
+  },
+  linkHighlight: {
+    color: '#007bff',
+    fontWeight: '600',
   },
   errorBox: {
     backgroundColor: '#ffe6e6',

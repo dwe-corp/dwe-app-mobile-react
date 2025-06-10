@@ -38,13 +38,9 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      {/* Botão fixo no topo esquerdo */}
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-        <Text style={styles.backText}>← Voltar</Text>
-      </TouchableOpacity>
 
       <View style={styles.card}>
-        <Text style={styles.header}>Criar Conta</Text>
+        <Text style={styles.header}>Cadastro</Text>
 
         <TextInput
           style={[styles.input, errors.nome && styles.inputError]}
@@ -104,7 +100,14 @@ export default function RegisterScreen({ navigation }) {
           </View>
         )}
 
-        <CustomButton title="Cadastrar" onPress={handleRegister} />
+        <CustomButton title="Criar Conta" onPress={handleRegister} />
+
+        {/* Link: Já é usuário? Entrar */}
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.linkBottom}>
+            Já é usuário? <Text style={styles.linkHighlight}>Entrar</Text>
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -207,5 +210,15 @@ const styles = StyleSheet.create({
     color: '#cc0000',
     fontSize: 13,
     marginBottom: 4,
+  },
+  linkBottom: {
+    marginTop: 16,
+    textAlign: 'center',
+    color: '#666',
+    fontSize: 14,
+  },
+  linkHighlight: {
+    color: '#007bff',
+    fontWeight: '600',
   }
 });
