@@ -1,25 +1,44 @@
 import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 export default function DashboardScreen() {
   const { logout, userName } = useAuth();
   const navigation = useNavigation();
+  const route = useRoute();
+  const perfil = route.params?.perfil;
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      navigation.setOptions({
-        headerRight: () => (
-          <TouchableOpacity onPress={logout} style={{ marginRight: 16 }}>
-            <Text style={{ color: '#007bff', fontWeight: 'bold' }}>Sair</Text>
-          </TouchableOpacity>
-        ),
-      });
-    });
+  console.log('Perfil recebido:', perfil);
 
-    return unsubscribe;
-  }, [navigation]);
+  const getPerfilStyle = (perfil: string | undefined) => {
+    switch (perfil?.toUpperCase()) {
+      case 'CONSERVADOR':
+        return {
+          backgroundColor: '#E8F5E9',
+          borderColor: '#A5D6A7',
+          color: '#2E7D32',
+        };
+      case 'MODERADO':
+        return {
+          backgroundColor: '#FFF8E1',
+          borderColor: '#FFE082',
+          color: '#F57F17',
+        };
+      case 'AGRESSIVO':
+        return {
+          backgroundColor: '#FFEBEE',
+          borderColor: '#EF9A9A',
+          color: '#C62828',
+        };
+      default:
+        return {
+          backgroundColor: '#E6F0FF',
+          borderColor: '#B0D4FF',
+          color: '#007AFF',
+        };
+    }
+  };
 
   const cards = [
     {
@@ -48,13 +67,30 @@ export default function DashboardScreen() {
     },
   ];
 
+  const perfilStyle = getPerfilStyle(perfil);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.topBar}>
-        <Text style={styles.header}>Olá, {userName || 'Investidor'}</Text>
-        <TouchableOpacity onPress={logout} style={styles.logoutButton}>
-          <Text style={styles.logoutText}>Sair</Text>
-        </TouchableOpacity>
+        <Text style={styles.header}>
+          Olá, {userName || 'Investidor'}
+        </Text>
+
+        <View style={styles.rightButtons}>
+          {perfil && (
+            <View style={[
+              styles.perfilBadge,
+              { backgroundColor: perfilStyle.backgroundColor, borderColor: perfilStyle.borderColor }
+            ]}>
+              <Text style={[styles.perfilText, { color: perfilStyle.color }]}>
+                Perfil: {perfil}
+              </Text>
+            </View>
+          )}
+          <TouchableOpacity onPress={logout} style={styles.logoutButtonHeader}>
+            <Text style={styles.logoutText}>Sair</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.grid}>
@@ -78,22 +114,6 @@ export default function DashboardScreen() {
 const CARD_GAP = 16;
 
 const styles = StyleSheet.create({
-  logoutButton: {
-  backgroundColor: '#E6F0FF',
-  paddingVertical: 8,
-  paddingHorizontal: 16,
-  borderRadius: 20,
-  shadowColor: '#000',
-  shadowOpacity: 0.08,
-  shadowOffset: { width: 0, height: 2 },
-  shadowRadius: 4,
-  elevation: 3,
-  },
-  logoutText: {
-    color: '#007AFF',
-    fontWeight: '600',
-    fontSize: 14,
-  },
   container: {
     paddingTop: 24,
     paddingBottom: 40,
@@ -101,12 +121,49 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
     flexGrow: 1,
   },
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  rightButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   header: {
     fontSize: 24,
     fontWeight: '700',
-    marginBottom: 24,
-    textAlign: 'center',
     color: '#222',
+  },
+  perfilBadge: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    borderWidth: 1,
+    marginRight: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.06,
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  perfilText: {
+    fontWeight: '600',
+    fontSize: 13,
+  },
+  logoutButtonHeader: {
+    backgroundColor: '#FDECEC',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#FFBABA',
+  },
+  logoutText: {
+    color: '#FF3B30',
+    fontWeight: '600',
+    fontSize: 13,
   },
   grid: {
     flexDirection: 'row',
@@ -158,14 +215,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  logout: {
-    color: '#007AFF',
-    fontWeight: 'bold',
-  }
 });

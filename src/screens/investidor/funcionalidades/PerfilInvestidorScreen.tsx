@@ -9,10 +9,11 @@ import {
   Alert
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { registerUserSuitability } from '../../../services/suitabilityService';
 
 export default function PerfilInvestidorScreen() {
   const navigation = useNavigation();
-  const scrollViewRef = useRef(null); // Ref para o ScrollView
+  const scrollViewRef = useRef(null);
 
   const [respostas, setRespostas] = useState<{ [key: number]: string }>({});
   const [paginaAtual, setPaginaAtual] = useState(0);
@@ -189,10 +190,10 @@ const perguntas = [
   const handleSelecionar = (index: number, opcao: string) => {
     const chave = opcao.charAt(0); // "A", "B" ou "C"
     setRespostas({ ...respostas, [index]: chave });
-    setErros({ ...erros, [index]: false }); // Remover erro ao selecionar resposta
+    setErros({ ...erros, [index]: false });
   };
 
-  const handleAvancar = () => {
+  const handleAvancar = async () => {
     const perguntasPaginaAtual = perguntas.slice(inicio, fim);
     const todasRespondidas = perguntasPaginaAtual.every((_, i) => respostas[inicio + i]);
 
@@ -204,7 +205,6 @@ const perguntas = [
         }
       });
       setErros(novasErros);
-
       Alert.alert('Atenção', 'Por favor, responda todas as perguntas antes de continuar.');
       return;
     }
@@ -218,33 +218,43 @@ const perguntas = [
       });
 
       console.log('Contagem das Respostas:', contagem);
-      Alert.alert('Respostas Enviadas', `Respostas A: ${contagem.A}, B: ${contagem.B}, C: ${contagem.C}`);
+
+      const resultado = await registerUserSuitability(
+        contagem.A,
+        contagem.B,
+        contagem.C
+      );
+
+      console.log('Resposta da API de Suitability:', resultado.data);
+
+      if (resultado.success) {
+        Alert.alert('Sucesso', 'Seu perfil foi registrado com sucesso!');
+        navigation.navigate('Dashboard', { perfil: resultado.data.cliente.risco }); // altere para a rota desejada
+      } else {
+        Alert.alert('Erro', 'Não foi possível registrar seu perfil. Tente novamente.');
+      }
     } else {
       setPaginaAtual(paginaAtual + 1);
-      scrollViewRef.current.scrollTo({ y: 0, animated: true }); // Rolar para o topo quando avançar
+      scrollViewRef.current.scrollTo({ y: 0, animated: true });
     }
   };
 
   const handleVoltar = () => {
     if (paginaAtual > 0) {
       setPaginaAtual(paginaAtual - 1);
-      scrollViewRef.current.scrollTo({ y: 0, animated: true }); // Rolar para o topo ao voltar
+      scrollViewRef.current.scrollTo({ y: 0, animated: true });
     }
   };
 
   return (
     <View style={styles.container}>
-      {/* Botão de Voltar fixo no topo */}
       {paginaAtual === 0 && (
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Text style={styles.backText}>← Voltar</Text>
         </TouchableOpacity>
       )}
 
-      <ScrollView
-        ref={scrollViewRef}
-        contentContainerStyle={styles.content}
-      >
+      <ScrollView ref={scrollViewRef} contentContainerStyle={styles.content}>
         {perguntas.slice(inicio, fim).map((pergunta, index) => {
           const perguntaIndex = inicio + index;
           return (
@@ -343,7 +353,7 @@ const styles = StyleSheet.create({
     borderColor: '#eaeaea',
   },
   perguntaErro: {
-    borderColor: 'red', // Borda vermelha se a pergunta não for respondida
+    borderColor: 'red',
   },
   perguntaTitulo: {
     fontSize: 17,
@@ -384,7 +394,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     backgroundColor: '#ccc',
     borderRadius: 8,
-    marginRight: 'auto', // Move the 'Voltar' button to the left
+    marginRight: 'auto',
   },
   voltarText: {
     color: '#333',
@@ -396,7 +406,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 8,
-    marginLeft: 'auto', // Move the 'Próxima Página' or 'Enviar' button to the right
+    marginLeft: 'auto',
   },
   submitButtonText: {
     color: '#fff',

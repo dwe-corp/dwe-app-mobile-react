@@ -30,7 +30,7 @@ export const registerUser = async (
 ): Promise<boolean> => {
   try {
     const payload = { nome, email, senha, perfil };
-    console.log('📤 Enviando para /auth:', payload); // debug opcional
+    console.log('📤 Enviando para /auth:', payload);
     const response = await axios.post(`${API_URL}/auth`, payload);
     return response.status === 201 || response.status === 200;
   } catch (error: any) {
