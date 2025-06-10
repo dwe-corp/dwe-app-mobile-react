@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import CustomButton from '../components/CustomButton';
 import { registerUser } from '../services/authService';
 
@@ -38,6 +38,11 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      {/* Botão fixo no topo esquerdo */}
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <Text style={styles.backText}>← Voltar</Text>
+      </TouchableOpacity>
+
       <View style={styles.card}>
         <Text style={styles.header}>Criar Conta</Text>
 
@@ -65,7 +70,6 @@ export default function RegisterScreen({ navigation }) {
           onChangeText={setSenha}
         />
 
-        
         <View style={styles.perfilContainer}>
           <TouchableOpacity
             style={[
@@ -107,7 +111,33 @@ export default function RegisterScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f2f2f2' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f2f2f2',
+    paddingTop: Platform.OS === 'web' ? 60 : 40,
+  },
+  backButton: {
+    position: 'absolute',
+    top: Platform.OS === 'web' ? 24 : 40,
+    left: 24,
+    backgroundColor: '#E6F0FF',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    zIndex: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  backText: {
+    color: '#007AFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
   card: {
     backgroundColor: '#fff',
     padding: 24,
@@ -120,7 +150,12 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 3,
   },
-  header: { fontSize: 24, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
@@ -132,11 +167,6 @@ const styles = StyleSheet.create({
   inputError: {
     borderColor: '#cc0000',
     backgroundColor: '#fff6f6',
-  },
-  label: {
-    marginTop: 8,
-    marginBottom: 6,
-    fontWeight: '600',
   },
   perfilContainer: {
     flexDirection: 'row',
