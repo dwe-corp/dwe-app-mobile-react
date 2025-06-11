@@ -1,99 +1,106 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 
 export default function InsightsScreen() {
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.safeContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.sectionTitle}>Panorama do Mercado</Text>
 
-      <Text style={styles.sectionTitle}>Panorama do Mercado</Text>
-      <View style={styles.cardRow}>
-        <View style={styles.cardText}>
-          <Text style={styles.cardTitle}>Boletim Semanal</Text>
-          <Text style={styles.cardDescription}>
-            Mantenha-se à frente com análises especializadas sobre tendências e oportunidades do mercado.
-          </Text>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Leia Agora</Text>
-          </TouchableOpacity>
+        <View style={styles.cardRow}>
+          <View style={styles.cardText}>
+            <Text style={styles.cardTitle}>Boletim Semanal</Text>
+            <Text style={styles.cardDescription}>
+              Mantenha-se à frente com análises especializadas sobre tendências e oportunidades do mercado.
+            </Text>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>Leia Agora</Text>
+            </TouchableOpacity>
+          </View>
+          <Image
+            source={require('../../assets/news.png')}
+            style={styles.cardImage}
+          />
         </View>
-        <Image
-          source={require('../../assets/news.png')}
-          style={styles.cardImage}
-        />
-      </View>
 
-      <View style={styles.separator} />
+        <View style={styles.separator} />
 
-      <Text style={styles.sectionTitle}>Indicadores de Performance</Text>
-      <View style={styles.cardRow}>
-        <View style={styles.cardText}>
-          <Text style={styles.cardTitle}>Portfólio</Text>
-          <Text style={styles.cardDescription}>
-            Acesse relatórios detalhados de desempenho, incluindo alocação de ativos e retornos.
-          </Text>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Ver Relatórios</Text>
-          </TouchableOpacity>
+        <Text style={styles.sectionTitle}>Indicadores de Performance</Text>
+        <View style={styles.cardRow}>
+          <View style={styles.cardText}>
+            <Text style={styles.cardTitle}>Portfólio</Text>
+            <Text style={styles.cardDescription}>
+              Acesse relatórios detalhados de desempenho, incluindo alocação de ativos e retornos.
+            </Text>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>Ver Relatórios</Text>
+            </TouchableOpacity>
+          </View>
+          <Image
+            source={require('../../assets/chart.png')}
+            style={styles.cardImage}
+          />
         </View>
-        <Image
-          source={require('../../assets/chart.png')}
-          style={styles.cardImage}
-        />
-      </View>
 
-      <View style={styles.separator} />
+        <View style={styles.separator} />
 
-      <Text style={styles.sectionTitle}>Ferramentas</Text>
+        <Text style={styles.sectionTitle}>Ferramentas</Text>
 
-      <View style={styles.cardRow}>
-        <View style={styles.cardText}>
-          <Text style={styles.cardTitle}>Simulador de Portfólio</Text>
-          <Text style={styles.cardDescription}>
-            Experimente diferentes estratégias de investimento e simule o desempenho da carteira.
-          </Text>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Simular</Text>
-          </TouchableOpacity>
+        <View style={styles.cardRow}>
+          <View style={styles.cardText}>
+            <Text style={styles.cardTitle}>Simulador de Portfólio</Text>
+            <Text style={styles.cardDescription}>
+              Experimente diferentes estratégias de investimento e simule o desempenho da carteira.
+            </Text>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>Simular</Text>
+            </TouchableOpacity>
+          </View>
+          <Image
+            source={require('../../assets/simulator.png')}
+            style={styles.cardImage}
+          />
         </View>
-        <Image
-          source={require('../../assets/simulator.png')}
-          style={styles.cardImage}
-        />
-      </View>
 
-      <View style={styles.separator} />
+        <View style={styles.separator} />
 
-      <View style={styles.cardRow}>
-        <View style={styles.cardText}>
-          <Text style={styles.cardTitle}>Lembretes Inteligentes</Text>
-          <Text style={styles.cardDescription}>
-            Configure lembretes automáticos para revisões de carteira e datas importantes.
-          </Text>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Criar Lembretes</Text>
-          </TouchableOpacity>
+        <View style={styles.cardRow}>
+          <View style={styles.cardText}>
+            <Text style={styles.cardTitle}>Lembretes Inteligentes</Text>
+            <Text style={styles.cardDescription}>
+              Configure lembretes automáticos para revisões de carteira e datas importantes.
+            </Text>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>Criar Lembretes</Text>
+            </TouchableOpacity>
+          </View>
+          <Image
+            source={require('../../assets/reminder.png')}
+            style={styles.cardImage}
+          />
         </View>
-        <Image
-          source={require('../../assets/reminder.png')}
-          style={styles.cardImage}
-        />
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeContainer: {
     flex: 1,
     backgroundColor: '#FAFAFA',
+  },
+  scrollContent: {
     paddingHorizontal: 20,
     paddingTop: 20,
-  },
-  header: {
-    fontSize: 22,
-    fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: 24,
+    paddingBottom: 40,
   },
   sectionTitle: {
     fontSize: 18,
@@ -152,5 +159,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
     marginVertical: 20,
     width: '100%',
-  }
+  },
 });

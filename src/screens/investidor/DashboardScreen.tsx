@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import {
+  SafeAreaView,
+  ScrollView,
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
-  ScrollView,
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { getUserRiskProfile } from '../../services/suitabilityService';
-import { useIsFocused } from '@react-navigation/native';
 
 export default function DashboardScreen() {
   const { logout, userName, userEmail } = useAuth();
@@ -94,43 +94,43 @@ export default function DashboardScreen() {
   ];
 
   const perfilStyle = getPerfilStyle(perfil);
-    
+
   if (loading) {
     return (
-      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-        <ActivityIndicator size="large" color="#007AFF" />
-        <Text style={{ marginTop: 12 }}>Carregando seu perfil...</Text>
-      </View>
+      <SafeAreaView style={styles.safeContainer}>
+        <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+          <ActivityIndicator size="large" color="#007AFF" />
+          <Text style={{ marginTop: 12 }}>Carregando seu perfil...</Text>
+        </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <ScrollView contentContainerStyle={[styles.container, isMobile && styles.containerMobile]}>
-      <View style={styles.topBar}>
-        <Text style={styles.header}>Olá, {userName || 'Investidor'}</Text>
+    <SafeAreaView style={styles.safeContainer}>
+      <ScrollView contentContainerStyle={[styles.container, isMobile && styles.containerMobile]}>
+        <View style={styles.topBar}>
+          <Text style={styles.header}>Olá, {userName || 'Investidor'}</Text>
 
-        <View style={styles.rightButtons}>
-          {perfil && (
-            <View
-              style={[
-                styles.perfilBadge,
-                {
-                  backgroundColor: perfilStyle.backgroundColor,
-                  borderColor: perfilStyle.borderColor,
-                },
-              ]}
-            >
-              <Text style={[styles.perfilText, { color: perfilStyle.color }]}>
-                Perfil: {perfil}
-              </Text>
-            </View>
-          )}
+          <View style={styles.rightButtons}>
+            {perfil && (
+              <View
+                style={[
+                  styles.perfilBadge,
+                  {
+                    backgroundColor: perfilStyle.backgroundColor,
+                    borderColor: perfilStyle.borderColor,
+                  },
+                ]}
+              >
+                <Text style={[styles.perfilText, { color: perfilStyle.color }]}>
+                  Perfil: {perfil}
+                </Text>
+              </View>
+            )}
+          </View>
         </View>
-      </View>
 
-      {loading ? (
-        <ActivityIndicator size="large" color="#007AFF" style={{ marginTop: 40 }} />
-      ) : (
         <View style={[styles.grid, isMobile && styles.gridMobile]}>
           {cards.map((item, idx) => (
             <View
@@ -151,19 +151,22 @@ export default function DashboardScreen() {
             </View>
           ))}
         </View>
-      )}
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const CARD_GAP = 16;
 
 const styles = StyleSheet.create({
+  safeContainer: {
+    flex: 1,
+    backgroundColor: '#f8f8f8',
+  },
   container: {
     paddingTop: 24,
     paddingBottom: 40,
     paddingHorizontal: 16,
-    backgroundColor: '#f8f8f8',
     flexGrow: 1,
   },
   containerMobile: {
@@ -197,19 +200,6 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   perfilText: {
-    fontWeight: '600',
-    fontSize: 13,
-  },
-  logoutButtonHeader: {
-    backgroundColor: '#FDECEC',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#FFBABA',
-  },
-  logoutText: {
-    color: '#FF3B30',
     fontWeight: '600',
     fontSize: 13,
   },

@@ -1,12 +1,13 @@
 import React, { useState, useRef } from 'react';
 import {
+  SafeAreaView,
   View,
   Text,
   ScrollView,
   TouchableOpacity,
   StyleSheet,
   Platform,
-  Alert
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { registerUserSuitability } from '../../../services/suitabilityService';
@@ -258,74 +259,101 @@ export default function PerfilInvestidorScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      {paginaAtual === 0 && (
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="chevron-back" size={24} color="black" />
-      </TouchableOpacity>
-      )}
-
-      <ScrollView ref={scrollViewRef} contentContainerStyle={styles.content}>
-        {perguntas.slice(inicio, fim).map((pergunta, index) => {
-          const perguntaIndex = inicio + index;
-          return (
-            <View
-              key={perguntaIndex}
-              style={[styles.perguntaContainer, erros[perguntaIndex] && styles.perguntaErro]}
-            >
-              <Text style={styles.perguntaTitulo}>{pergunta.titulo}</Text>
-              {pergunta.opcoes.map((opcao, idx) => (
-                <TouchableOpacity
-                  key={idx}
-                  style={[styles.opcaoButton,
-                    respostas[perguntaIndex] === opcao.charAt(0) && styles.opcaoSelecionada]}
-                  onPress={() => handleSelecionar(perguntaIndex, opcao)}
-                >
-                  <Text style={[styles.opcaoTexto,
-                    respostas[perguntaIndex] === opcao.charAt(0) && styles.opcaoTextoSelecionado]}
-                  >
-                    {opcao}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          );
-        })}
-
-        <View style={[styles.footerButtons,{ justifyContent: paginaAtual > 0 ? 'space-between' : 'flex-end' }]}>
-          {paginaAtual > 0 && (
-            <TouchableOpacity style={styles.navButtonCinza} onPress={handleVoltar}>
-              <Ionicons name="chevron-back" size={24} color="#333" />
-            </TouchableOpacity>
-          )}
-
-          <TouchableOpacity style={styles.navButtonAzul} onPress={handleAvancar}>
-            <Ionicons name={paginaFinal ? "checkmark" : "chevron-forward"} size={24} color="#fff" />
+    <SafeAreaView style={styles.safeContainer}>
+      <View style={styles.container}>
+        {paginaAtual === 0 && (
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back" size={24} color="black" />
           </TouchableOpacity>
-        </View>
+        )}
 
-      </ScrollView>
-    </View>
+        <ScrollView ref={scrollViewRef} contentContainerStyle={styles.content}>
+          {perguntas.slice(inicio, fim).map((pergunta, index) => {
+            const perguntaIndex = inicio + index;
+            return (
+              <View
+                key={perguntaIndex}
+                style={[
+                  styles.perguntaContainer,
+                  erros[perguntaIndex] && styles.perguntaErro,
+                ]}
+              >
+                <Text style={styles.perguntaTitulo}>{pergunta.titulo}</Text>
+                {pergunta.opcoes.map((opcao, idx) => (
+                  <TouchableOpacity
+                    key={idx}
+                    style={[
+                      styles.opcaoButton,
+                      respostas[perguntaIndex] === opcao.charAt(0) &&
+                        styles.opcaoSelecionada,
+                    ]}
+                    onPress={() => handleSelecionar(perguntaIndex, opcao)}
+                  >
+                    <Text
+                      style={[
+                        styles.opcaoTexto,
+                        respostas[perguntaIndex] === opcao.charAt(0) &&
+                          styles.opcaoTextoSelecionado,
+                      ]}
+                    >
+                      {opcao}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            );
+          })}
+
+          <View
+            style={[
+              styles.footerButtons,
+              {
+                justifyContent:
+                  paginaAtual > 0 ? 'space-between' : 'flex-end',
+              },
+            ]}
+          >
+            {paginaAtual > 0 && (
+              <TouchableOpacity
+                style={styles.navButtonCinza}
+                onPress={handleVoltar}
+              >
+                <Ionicons name="chevron-back" size={24} color="#333" />
+              </TouchableOpacity>
+            )}
+
+            <TouchableOpacity
+              style={styles.navButtonAzul}
+              onPress={handleAvancar}
+            >
+              <Ionicons
+                name={paginaFinal ? 'checkmark' : 'chevron-forward'}
+                size={24}
+                color="#fff"
+              />
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeContainer: {
+    flex: 1,
+    backgroundColor: '#f8f8f8',
+  },
   container: {
     flex: 1,
-    paddingTop: Platform.OS === 'web' ? 24 : 48,
+    paddingTop: 24,
     paddingHorizontal: 20,
-    backgroundColor: '#f8f8f8',
   },
   backButton: {
     position: 'absolute',
     top: 40,
     left: 16,
     zIndex: 10,
-  },
-  backText: {
-    color: '#007AFF',
-    fontSize: 16,
-    fontWeight: '600',
   },
   content: {
     paddingTop: 60,
@@ -377,7 +405,6 @@ const styles = StyleSheet.create({
   },
   footerButtons: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
     gap: 12,
     marginTop: 32,
     paddingHorizontal: 6,
@@ -399,5 +426,5 @@ const styles = StyleSheet.create({
     height: 48,
     alignItems: 'center',
     justifyContent: 'center',
-  }
+  },
 });

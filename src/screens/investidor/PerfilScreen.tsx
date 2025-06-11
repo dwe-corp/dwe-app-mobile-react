@@ -1,5 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,60 +17,65 @@ export default function ProfileScreen() {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
-      <Image
-        source={require('../../assets/avatar.png')}
-        style={styles.avatar}
-      />
+    <SafeAreaView style={styles.safeContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Image
+          source={require('../../assets/avatar.png')}
+          style={styles.avatar}
+        />
 
-      <Text style={styles.name}>{userName}</Text>
-      <Text style={styles.role}>{userProfile}</Text>
+        <Text style={styles.name}>{userName}</Text>
+        <Text style={styles.role}>{userProfile}</Text>
 
-      <View style={styles.separator} />
+        <View style={styles.separator} />
 
-      <View style={styles.optionBox}>
-        <Ionicons name="mail-outline" size={20} color="#333" style={styles.icon} />
-        <View style={{ flex: 1 }}>
-          <Text style={styles.optionLabel}>Email</Text>
-          <Text
-            style={styles.optionValue}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-          >
-            {userEmail}
-          </Text>
+        <View style={styles.optionBox}>
+          <Ionicons name="mail-outline" size={20} color="#333" style={styles.icon} />
+          <View style={{ flex: 1 }}>
+            <Text style={styles.optionLabel}>Email</Text>
+            <Text
+              style={styles.optionValue}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {userEmail}
+            </Text>
+          </View>
         </View>
-      </View>
 
-      <TouchableOpacity
-        style={styles.optionButton}
-        onPress={() => navigation.navigate('ConfigConta')}
-      >
-        <Ionicons name="settings-outline" size={20} color="#333" style={styles.icon} />
-        <Text style={styles.optionText}>Configurações da Conta</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.optionButton}
+          onPress={() => navigation.navigate('ConfigConta')}
+        >
+          <Ionicons name="settings-outline" size={20} color="#333" style={styles.icon} />
+          <Text style={styles.optionText}>Configurações da Conta</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.optionButton}
-        onPress={() => navigation.navigate('FormularioCadastro')}
-      >
-        <Ionicons name="document-text-outline" size={20} color="#333" style={styles.icon} />
-        <Text style={styles.optionText}>Formulário de Cadastro</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.optionButton}
+          onPress={() => navigation.navigate('FormularioCadastro')}
+        >
+          <Ionicons name="document-text-outline" size={20} color="#333" style={styles.icon} />
+          <Text style={styles.optionText}>Formulário de Cadastro</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.logoutButton} onPress={logout}>
-        <Text style={styles.logoutText}>Sair</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity style={styles.logoutButton} onPress={logout}>
+          <Text style={styles.logoutText}>Sair</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeContainer: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingTop: 60,
+  },
+  scrollContent: {
     paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 40,
     alignItems: 'center',
   },
   avatar: {

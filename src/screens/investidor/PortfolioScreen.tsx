@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 
 interface PortfolioData {
   valorTotal?: number;
@@ -65,80 +72,85 @@ export default function PortfolioScreen() {
   );
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.sectionTitle}>Desempenho</Text>
-      <View style={styles.cardRow}>
-        {renderValue('Valor Total', data?.valorTotal, true)}
-        {renderValue('Crescimento', data?.crescimento, true)}
-      </View>
-      <View style={styles.cardFull}>
-        <Text style={styles.cardLabel}>Retornos</Text>
-        <Text style={data?.retorno !== undefined ? styles.cardValue : styles.cardUnavailable}>
-          {data?.retorno !== undefined ? `${data.retorno}%` : 'Indisponível'}
-        </Text>
-      </View>
-
-      <View style={styles.separator} />
-
-      <Text style={styles.sectionTitle}>Alocação de Ativos</Text>
-      <View style={styles.chartContainer}>
-        <View style={[styles.bar, { height: (alocacao.acoes ?? 5) + 20 }]} />
-        <View style={[styles.bar, { height: (alocacao.rendaFixa ?? 5) + 20 }]} />
-        <View style={[styles.bar, { height: (alocacao.imoveis ?? 5) + 20 }]} />
-        <View style={[styles.bar, { height: (alocacao.liquidez ?? 5) + 20 }]} />
-      </View>
-      <View style={styles.chartLabels}>
-        <Text style={styles.chartLabel} numberOfLines={1} ellipsizeMode="tail">Ações</Text>
-        <Text style={styles.chartLabel} numberOfLines={1} ellipsizeMode="tail">Renda Fixa</Text>
-        <Text style={styles.chartLabel} numberOfLines={1} ellipsizeMode="tail">Imóveis</Text>
-        <Text style={styles.chartLabel} numberOfLines={1} ellipsizeMode="tail">Liquidez</Text>
-      </View>
-
-      <View style={styles.separator} />
-
-      <Text style={styles.sectionTitle}>Diversificação</Text>
-      <View style={styles.diversificationRow}>
-        <View style={styles.divColumn}>
-          <Text style={styles.divLabel}>Ações</Text>
-          <Text style={styles.divValue}>
-            {alocacao.acoes !== undefined ? `${alocacao.acoes}%` : '–'}
+    <SafeAreaView style={styles.safeContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={[styles.sectionTitle, { marginTop: 12 }]}>Desempenho</Text>
+        <View style={styles.cardRow}>
+          {renderValue('Valor Total', data?.valorTotal, true)}
+          {renderValue('Crescimento', data?.crescimento, true)}
+        </View>
+        <View style={styles.cardFull}>
+          <Text style={styles.cardLabel}>Retornos</Text>
+          <Text style={data?.retorno !== undefined ? styles.cardValue : styles.cardUnavailable}>
+            {data?.retorno !== undefined ? `${data.retorno}%` : 'Indisponível'}
           </Text>
         </View>
-        <View style={styles.divColumn}>
-          <Text style={styles.divLabel}>Renda Fixa</Text>
-          <Text style={styles.divValue}>
-            {alocacao.rendaFixa !== undefined ? `${alocacao.rendaFixa}%` : '–'}
-          </Text>
+
+        <View style={styles.separator} />
+
+        <Text style={styles.sectionTitle}>Alocação de Ativos</Text>
+        <View style={styles.chartContainer}>
+          <View style={[styles.bar, { height: (alocacao.acoes ?? 5) + 20 }]} />
+          <View style={[styles.bar, { height: (alocacao.rendaFixa ?? 5) + 20 }]} />
+          <View style={[styles.bar, { height: (alocacao.imoveis ?? 5) + 20 }]} />
+          <View style={[styles.bar, { height: (alocacao.liquidez ?? 5) + 20 }]} />
         </View>
-      </View>
-      <View style={styles.diversificationRow}>
-        <View style={styles.divColumn}>
-          <Text style={styles.divLabel}>Imóveis</Text>
-          <Text style={styles.divValue}>
-            {alocacao.imoveis !== undefined ? `${alocacao.imoveis}%` : '–'}
-          </Text>
+        <View style={styles.chartLabels}>
+          <Text style={styles.chartLabel} numberOfLines={1} ellipsizeMode="tail">Ações</Text>
+          <Text style={styles.chartLabel} numberOfLines={1} ellipsizeMode="tail">Renda Fixa</Text>
+          <Text style={styles.chartLabel} numberOfLines={1} ellipsizeMode="tail">Imóveis</Text>
+          <Text style={styles.chartLabel} numberOfLines={1} ellipsizeMode="tail">Liquidez</Text>
         </View>
-        <View style={styles.divColumn}>
-          <Text style={styles.divLabel}>Liquidez</Text>
-          <Text style={styles.divValue}>
-            {alocacao.liquidez !== undefined ? `${alocacao.liquidez}%` : '–'}
-          </Text>
+
+        <View style={styles.separator} />
+
+        <Text style={styles.sectionTitle}>Diversificação</Text>
+        <View style={styles.diversificationRow}>
+          <View style={styles.divColumn}>
+            <Text style={styles.divLabel}>Ações</Text>
+            <Text style={styles.divValue}>
+              {alocacao.acoes !== undefined ? `${alocacao.acoes}%` : '–'}
+            </Text>
+          </View>
+          <View style={styles.divColumn}>
+            <Text style={styles.divLabel}>Renda Fixa</Text>
+            <Text style={styles.divValue}>
+              {alocacao.rendaFixa !== undefined ? `${alocacao.rendaFixa}%` : '–'}
+            </Text>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+        <View style={styles.diversificationRow}>
+          <View style={styles.divColumn}>
+            <Text style={styles.divLabel}>Imóveis</Text>
+            <Text style={styles.divValue}>
+              {alocacao.imoveis !== undefined ? `${alocacao.imoveis}%` : '–'}
+            </Text>
+          </View>
+          <View style={styles.divColumn}>
+            <Text style={styles.divLabel}>Liquidez</Text>
+            <Text style={styles.divValue}>
+              {alocacao.liquidez !== undefined ? `${alocacao.liquidez}%` : '–'}
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeContainer: {
     flex: 1,
     backgroundColor: '#FAFAFA',
-    padding: 20,
+  },
+  scrollContent: {
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 40,
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    marginTop: 24,
     marginBottom: 12,
     color: '#222',
   },
