@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import DashboardScreen from '../screens/investidor/DashboardScreen';
 import PortfolioScreen from '../screens/investidor/PortfolioScreen';
-import AprendaScreen from '../screens/investidor/AprendaScreen';
+import InsightsScreen from '../screens/investidor/InsightsScreen';
 import PerfilScreen from '../screens/investidor/PerfilScreen';
 
 const Tab = createBottomTabNavigator();
@@ -18,8 +18,8 @@ export default function InvestorTabs() {
           let iconName = 'ellipse-outline';
 
           if (route.name === 'Home') iconName = 'home-outline';
-          else if (route.name === 'portfólio') iconName = 'pie-chart-outline';
-          else if (route.name === 'Learn') iconName = 'book-outline';
+          else if (route.name === 'portfólio') iconName = 'stats-chart-outline';
+          else if (route.name === 'Insights') iconName = 'analytics-outline';
           else if (route.name === 'Perfil') iconName = 'person-outline';
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -31,7 +31,7 @@ export default function InvestorTabs() {
     >
       <Tab.Screen name="Home" component={DashboardScreen} />
       <Tab.Screen name="portfólio" component={PortfolioScreen} />
-      <Tab.Screen name="Learn" component={AprendaScreen} />
+      <Tab.Screen name="Insights" component={InsightsScreen} />
       <Tab.Screen name="Perfil" component={PerfilScreen} />
     </Tab.Navigator>
   );
