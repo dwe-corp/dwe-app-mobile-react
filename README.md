@@ -116,18 +116,19 @@ App.tsx                   # Entrada principal da aplicação
 ### ▶️ Tela de Login
 
 ![Login](./assets/login.png)
+![Registro](./assets/cadastro.png)
 
 ---
 
-### ▶️ Tela do Dashboard (Investidor)
+### ▶️ Tela de Home (Investidor)
 
-![Dashboard](./assets/dashboard.png)
+![Home](./assets/home.png)
 
 ---
 
 ### ▶️ Teste de Perfil
 
-![Perfil](./assets/teste.png)
+![Perfil](./assets/definicao-perfil.png.jpg)
 
 ---
 
