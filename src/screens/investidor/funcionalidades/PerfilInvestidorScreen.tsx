@@ -242,7 +242,7 @@ export default function PerfilInvestidorScreen() {
           Alert.alert('Erro', 'Não foi possível registrar seu perfil. Tente novamente.');
         }
       } catch (err) {
-        console.error(err);
+        console.log(err);
         Alert.alert('Erro', 'Erro ao enviar dados. Verifique sua conexão.');
       }
     } else {

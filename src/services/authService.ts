@@ -16,7 +16,7 @@ export async function loginUser(email: string, senha: string): Promise<{ success
     
     return  { success: true, perfil, nome, email: userEmail };
   } catch (error: any) {
-    console.error('Erro ao fazer login:', error?.response?.data || error.message);
+    console.log('Erro ao fazer login:', error?.response?.data || error.message);
     return { success: false };
   }
 };
@@ -33,7 +33,7 @@ export const registerUser = async (
     const response = await axios.post(`${API_URL}/auth`, payload);
     return response.status === 201 || response.status === 200;
   } catch (error: any) {
-    console.error('Erro no cadastro:', error.response?.data || error.message);
+    console.log('Erro no cadastro:', error.response?.data || error.message);
     return false;
   }
 };

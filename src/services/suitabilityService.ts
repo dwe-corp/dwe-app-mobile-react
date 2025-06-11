@@ -24,7 +24,7 @@ export const registerUserSuitability = async (
       data: response.data,
     };
   } catch (error: any) {
-    console.error('Erro na API de Suitability:', error.response?.data || error.message);
+    console.log('Erro na API de Suitability:', error.response?.data || error.message);
     return {
       success: false,
       data: error.response?.data,
@@ -44,7 +44,7 @@ export const getUserRiskProfile = async (email: string): Promise<string | null> 
 
     return risco || null;
   } catch (error: any) {
-    console.error('Erro ao buscar perfil de risco:', error.response?.data || error.message);
+    console.log('Erro ao buscar perfil de risco:', error.response?.data || error.message);
     return null;
   }
 };
