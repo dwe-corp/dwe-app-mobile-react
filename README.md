@@ -1,31 +1,38 @@
-# Apagão Cidadão – Plataforma de Crowdsourcing
+# Plataforma de Assessoria de Investimentos – App Mobile
 
-Este projeto é uma aplicação **React Native** com **AsyncStorage** que permite ao cidadão registrar e visualizar eventos de falta de energia elétrica. A ideia é fomentar um monitoramento colaborativo, possibilitando o mapeamento dos apagões por região, com dados como localização, duração, prejuízos e recomendações.
+Este projeto é uma aplicação **React Native** com **AsyncStorage** que oferece uma experiência completa para **investidores** e **assessores de investimentos**, com funcionalidades como teste de perfil de risco, acesso ao portfólio, atualizações de mercado, ferramentas interativas e suporte via IA.
 
 ---
 
 ## 🤝 Autores
 
-- Deivison Pertel (RM550803)
 - Eduardo Akira Murata (RM98713)
+- Deivison Pertel (RM550803)
 - Wesley Souza de Oliveira (RM97874)
 
 ---
 
 ## 📱 Funcionalidades
 
-- Autenticação com **Login e Cadastro**
-- Registro de eventos de apagão:
-  - Localização afetada
-  - Tempo de interrupção
-  - Prejuízos observados
-- Recomendações para futuras situações
-- Visualização de todos os eventos registrados
-- Detalhamento de cada evento
-- Tela de **Boas Práticas**
-- Botão de logout funcional
-- Armazenamento local usando **AsyncStorage**
-- Interface compatível com **modo Web** (via Expo)
+### Para investidores:
+- Teste de perfil (Suitability) com retorno automático do perfil
+- Visualização do portfólio com indicadores:
+  - Valor total
+  - Crescimento
+  - Retorno percentual
+  - Alocação por classe de ativos
+- Acesso a insights de mercado com leitura de boletins
+- Simulador de portfólio e lembretes inteligentes
+
+### Para assessores:
+- Tela de clientes
+- Tela de investimentos e configurações
+
+### Recursos gerais:
+- Login e cadastro com persistência de sessão (JWT via AsyncStorage)
+- Navegação personalizada por tipo de perfil
+- Design responsivo e moderno
+- Separação de rotas autenticadas por perfil (Investidor ou Assessor)
 
 ---
 
@@ -33,12 +40,17 @@ Este projeto é uma aplicação **React Native** com **AsyncStorage** que permit
 
 ```
 src/
-├── components/           # Botões e componentes reutilizáveis
-├── navigation/           # Rotas de navegação autenticadas e não autenticadas
-├── screens/              # Telas principais do aplicativo
-├── services/             # Serviços de autenticação e armazenamento
-├── types/                # Tipagens compartilhadas
-App.tsx                   # Entrada principal
+├── assets/               # Imagens e ícones usados nos cards e telas
+├── components/           # Componentes reutilizáveis como botões
+├── context/              # AuthContext para controle de login e perfil
+├── navigation/           # Navegação por tabs e stacks
+├── screens/              # Telas principais divididas por perfil
+│   ├── investor/         # Telas específicas do investidor
+│   ├── assessor/         # Telas do assessor de investimentos
+│   ├── shared/           # Telas comuns como Login, Cadastro, Perfil
+├── services/             # Serviços de autenticação e perfil de risco
+├── utils/                # Funções utilitárias
+App.tsx                   # Entrada principal da aplicação
 ```
 
 ---
@@ -50,6 +62,8 @@ App.tsx                   # Entrada principal
 - React Navigation
 - AsyncStorage
 - Expo CLI
+- Axios
+- API externa para avaliação de perfil de risco
 
 ---
 
@@ -57,8 +71,8 @@ App.tsx                   # Entrada principal
 
 1. **Clone o repositório**:
    ```bash
-   git clone https://github.com/seu-usuario/apagao-cidadao-mobile.git
-   cd dwe-app-mobile-react
+   git clone https://github.com/seu-usuario/app-investimentos.git
+   cd app-investimentos
    ```
 
 2. **Instale as dependências**:
@@ -71,81 +85,67 @@ App.tsx                   # Entrada principal
    npx expo start
    ```
 
-4. Acesse pelo navegador o QR Code ou o localhost exibido.
+4. Escaneie o QR Code com o app do Expo Go ou acesse via navegador.
 
 ---
 
 ## 🖼️ Telas Implementadas
 
 - **Login / Cadastro**
-- **Home** – Resumo dos eventos registrados
-- **Cadastrar Evento** – Formulário completo: 
-    - Registro da região atingida, 
-    - Registro da duração da interrupção,
-    - Campo descritivo dos danos
-- **Detalhes** – Exibição detalhada dos dados
-- **Recomendações** – Lista de boas práticas
+- **Dashboard Investidor** – Teste de perfil, IA, atualizações, investimentos
+- **Perfil Investidor** – Formulário de perguntas com perfil calculado
+- **Portfólio** – Dados visuais e analíticos do investidor
+- **Insights** – Cards com boletins, relatórios e simulador
+- **Perfil** – Dados pessoais, configurações e logout
+- **Dashboard Assessor** – Home, clientes e gestão
 
 ---
 
 ## 🔐 Acesso e Sessão
 
-- Após login ou cadastro, o token é armazenado localmente.
-- O botão **Sair** apaga a sessão e redireciona automaticamente para a tela de login.
+- Após o login, o token é armazenado no dispositivo com **AsyncStorage**
+- O botão **Sair** limpa a sessão e redireciona para o login automaticamente
+- A navegação muda com base no perfil retornado pela API
 
 ---
 
 ## 📷 Evidências de Funcionamento
 
-
-### ▶️ Execução da aplicação
-
-![Tela do Terminal](./assets/terminal.png)
-
----
+> As imagens podem ser adicionadas futuramente no diretório `/assets/` para ilustrar:
 
 ### ▶️ Tela de Login
 
-![Tela de Login](./assets/login.png)
+![Login](./assets/login.png)
 
 ---
 
-### ▶️ Tela de Registro
+### ▶️ Tela do Dashboard (Investidor)
 
-![Tela de Registro](./assets/registro.png)
-
----
-
-### ▶️ Tela Principal
-
-![Tela Principal](./assets/home.png)
+![Dashboard](./assets/dashboard.png)
 
 ---
 
-### ▶️ Tela de Cadastro
+### ▶️ Teste de Perfil
 
-![Tela Cadastro](./assets/cadastro.png)
-
-Obs: Sistema pensado em execução web (windows). Ao cadastrar eventos em geral, ele gera um Alert com um response, como esse:
-
-![Alert](./assets/alert.png)
----
-
-### ▶️ Tela Principal com Eventos
-
-![Tela Principal com Eventos](./assets/home-populada.png)
+![Perfil](./assets/teste.png)
 
 ---
 
-### ▶️ Detalhamento do Evento
+### ▶️ Tela de Portfólio
 
-![Detalhamento do Evento](./assets/detalhamento.png)
+![Portfólio](./assets/portfolio.png)
 
 ---
 
-### ▶️ Tela de Recomendações
+### ▶️ Tela de Insights
 
-![Tela de Recomendações](./assets/recomendacao.png)
+![Insights](./assets/insights.png)
+
+---
+
+### ▶️ Tela de Perfil
+
+![Perfil](./assets/perfil.png)
 
 ---
 
