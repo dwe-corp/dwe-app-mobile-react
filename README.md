@@ -128,7 +128,7 @@ App.tsx                   # Entrada principal da aplicação
 
 ### ▶️ Teste de Perfil
 
-![Perfil](./assets/definicao-perfil.png.jpg)
+![Perfil](./assets/definicao-perfil.png)
 
 ---
 
