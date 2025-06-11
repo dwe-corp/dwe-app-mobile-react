@@ -155,19 +155,19 @@ export default function DashboardScreen() {
 
         {cards.map((item, idx) => (
           <React.Fragment key={idx}>
-            <TouchableOpacity
-              style={styles.cardRow}
-              onPress={() => navigation.navigate(item.route)}
-            >
+            <View style={styles.cardRow}>
               <View style={styles.cardText}>
                 <Text style={styles.cardTitle}>{item.title}</Text>
                 <Text style={styles.cardDescription}>{item.desc}</Text>
-                <View style={styles.button}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => navigation.navigate(item.route)}
+                >
                   <Text style={styles.buttonText}>{item.button}</Text>
-                </View>
+                </TouchableOpacity>
               </View>
               <Image source={item.image} style={styles.cardImage} />
-            </TouchableOpacity>
+            </View>
 
             {idx !== cards.length - 1 && <View style={styles.separator} />}
           </React.Fragment>
