@@ -10,23 +10,27 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-
       <Image
         source={require('../../assets/avatar.png')}
         style={styles.avatar}
       />
 
-
       <Text style={styles.name}>{userName}</Text>
       <Text style={styles.role}>{userProfile}</Text>
 
-      <View style={{ height: 1, backgroundColor: '#eee', marginVertical: 20, width: '100%' }} />
+      <View style={styles.separator} />
 
       <View style={styles.optionBox}>
         <Ionicons name="mail-outline" size={20} color="#333" style={styles.icon} />
-        <View>
+        <View style={{ flex: 1 }}>
           <Text style={styles.optionLabel}>Email</Text>
-          <Text style={styles.optionValue}>{userEmail}</Text>
+          <Text
+            style={styles.optionValue}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {userEmail}
+          </Text>
         </View>
       </View>
 
@@ -53,7 +57,6 @@ export default function ProfileScreen() {
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -61,12 +64,6 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingHorizontal: 24,
     alignItems: 'center',
-  },
-  header: {
-    textAlign: 'center',
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 20,
   },
   avatar: {
     width: 100,
@@ -94,6 +91,12 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     letterSpacing: 1,
   },
+  separator: {
+    height: 1,
+    backgroundColor: '#eee',
+    marginVertical: 20,
+    width: '100%',
+  },
   optionBox: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -118,6 +121,8 @@ const styles = StyleSheet.create({
   optionValue: {
     fontSize: 16,
     fontWeight: '500',
+    color: '#333',
+    flexShrink: 1,
   },
   optionButton: {
     flexDirection: 'row',
@@ -145,5 +150,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#D9534F',
-  }
+  },
 });
