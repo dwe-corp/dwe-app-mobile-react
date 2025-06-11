@@ -11,15 +11,16 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { registerUserSuitability } from '../../../services/suitabilityService';
 import { useAuth } from '../../../context/AuthContext';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function PerfilInvestidorScreen() {
   const navigation = useNavigation();
   const scrollViewRef = useRef(null);
   const { userName, userEmail } = useAuth();
 
-  const [respostas, setRespostas] = useState<{ [key: number]: string }>({});
+  const [respostas, setRespostas] = useState({});
   const [paginaAtual, setPaginaAtual] = useState(0);
-  const [erros, setErros] = useState<{ [key: number]: boolean }>({});
+  const [erros, setErros] = useState({});
 
   const perguntas = [
     {
@@ -189,8 +190,8 @@ export default function PerfilInvestidorScreen() {
   const fim = inicio + perguntasPorPagina;
   const paginaFinal = fim >= perguntas.length;
 
-  const handleSelecionar = (index: number, opcao: string) => {
-    const chave = opcao.charAt(0); // "A", "B" ou "C"
+  const handleSelecionar = (index, opcao) => {
+    const chave = opcao.charAt(0);
     setRespostas({ ...respostas, [index]: chave });
     setErros({ ...erros, [index]: false });
   };
@@ -200,7 +201,7 @@ export default function PerfilInvestidorScreen() {
     const todasRespondidas = perguntasPaginaAtual.every((_, i) => respostas[inicio + i]);
 
     if (!todasRespondidas) {
-      const novasErros: { [key: number]: boolean } = {};
+      const novasErros = {};
       perguntasPaginaAtual.forEach((_, i) => {
         if (!respostas[inicio + i]) {
           novasErros[inicio + i] = true;
@@ -212,55 +213,56 @@ export default function PerfilInvestidorScreen() {
     }
 
     if (paginaFinal) {
-      const contagem = { A: 0, B: 0, C: 0 };
-      Object.values(respostas).forEach(resposta => {
-        if (resposta === 'A') contagem.A++;
-        if (resposta === 'B') contagem.B++;
-        if (resposta === 'C') contagem.C++;
-      });
+      try {
+        const contagem = { A: 0, B: 0, C: 0 };
+        Object.values(respostas).forEach(resposta => {
+          if (resposta === 'A') contagem.A++;
+          if (resposta === 'B') contagem.B++;
+          if (resposta === 'C') contagem.C++;
+        });
 
-      console.log('Contagem das Respostas:', contagem);
+        if (!userName || !userEmail) {
+          Alert.alert('Erro', 'E-mail do usuário não encontrado. Faça login novamente.');
+          return;
+        }
 
-      if (!userName || !userEmail) {
-        Alert.alert('Erro', 'E-mail do usuário não encontrado. Faça login novamente.');
-        return;
-      }
+        const resultado = await registerUserSuitability(
+          userName,
+          userEmail,
+          contagem.A,
+          contagem.B,
+          contagem.C
+        );
 
-      const resultado = await registerUserSuitability(
-        userName,
-        userEmail,
-        contagem.A,
-        contagem.B,
-        contagem.C
-      );
-
-      console.log('Resposta da API de Suitability:', resultado.data);
-
-      if (resultado.success) {
-        Alert.alert('Sucesso', 'Seu perfil foi registrado com sucesso!');
-        navigation.navigate('Dashboard');
-      } else {
-        Alert.alert('Erro', 'Não foi possível registrar seu perfil. Tente novamente.');
+        if (resultado.success) {
+          Alert.alert('Sucesso', 'Seu perfil foi registrado com sucesso!');
+          navigation.navigate('Home');
+        } else {
+          Alert.alert('Erro', 'Não foi possível registrar seu perfil. Tente novamente.');
+        }
+      } catch (err) {
+        console.error(err);
+        Alert.alert('Erro', 'Erro ao enviar dados. Verifique sua conexão.');
       }
     } else {
       setPaginaAtual(paginaAtual + 1);
-      scrollViewRef.current.scrollTo({ y: 0, animated: true });
+      scrollViewRef.current?.scrollTo({ y: 0, animated: true });
     }
   };
 
   const handleVoltar = () => {
     if (paginaAtual > 0) {
       setPaginaAtual(paginaAtual - 1);
-      scrollViewRef.current.scrollTo({ y: 0, animated: true });
+      scrollViewRef.current?.scrollTo({ y: 0, animated: true });
     }
   };
 
   return (
     <View style={styles.container}>
       {paginaAtual === 0 && (
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={styles.backText}>← Voltar</Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Ionicons name="chevron-back" size={24} color="black" />
+      </TouchableOpacity>
       )}
 
       <ScrollView ref={scrollViewRef} contentContainerStyle={styles.content}>
@@ -269,26 +271,18 @@ export default function PerfilInvestidorScreen() {
           return (
             <View
               key={perguntaIndex}
-              style={[
-                styles.perguntaContainer,
-                erros[perguntaIndex] && styles.perguntaErro,
-              ]}
+              style={[styles.perguntaContainer, erros[perguntaIndex] && styles.perguntaErro]}
             >
               <Text style={styles.perguntaTitulo}>{pergunta.titulo}</Text>
               {pergunta.opcoes.map((opcao, idx) => (
                 <TouchableOpacity
                   key={idx}
-                  style={[
-                    styles.opcaoButton,
-                    respostas[perguntaIndex] === opcao.charAt(0) && styles.opcaoSelecionada,
-                  ]}
+                  style={[styles.opcaoButton,
+                    respostas[perguntaIndex] === opcao.charAt(0) && styles.opcaoSelecionada]}
                   onPress={() => handleSelecionar(perguntaIndex, opcao)}
                 >
-                  <Text
-                    style={[
-                      styles.opcaoTexto,
-                      respostas[perguntaIndex] === opcao.charAt(0) && styles.opcaoTextoSelecionado,
-                    ]}
+                  <Text style={[styles.opcaoTexto,
+                    respostas[perguntaIndex] === opcao.charAt(0) && styles.opcaoTextoSelecionado]}
                   >
                     {opcao}
                   </Text>
@@ -298,17 +292,18 @@ export default function PerfilInvestidorScreen() {
           );
         })}
 
-        <View style={styles.footerButtons}>
+        <View style={[styles.footerButtons,{ justifyContent: paginaAtual > 0 ? 'space-between' : 'flex-end' }]}>
           {paginaAtual > 0 && (
-            <TouchableOpacity style={styles.voltarButton} onPress={handleVoltar}>
-              <Text style={styles.voltarText}>Voltar Página</Text>
+            <TouchableOpacity style={styles.navButtonCinza} onPress={handleVoltar}>
+              <Ionicons name="chevron-back" size={24} color="#333" />
             </TouchableOpacity>
           )}
 
-          <TouchableOpacity style={styles.submitButton} onPress={handleAvancar}>
-            <Text style={styles.submitButtonText}>{paginaFinal ? 'Enviar' : 'Próxima Página'}</Text>
+          <TouchableOpacity style={styles.navButtonAzul} onPress={handleAvancar}>
+            <Ionicons name={paginaFinal ? "checkmark" : "chevron-forward"} size={24} color="#fff" />
           </TouchableOpacity>
         </View>
+
       </ScrollView>
     </View>
   );
@@ -322,22 +317,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
   },
   backButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
     position: 'absolute',
-    top: Platform.OS === 'web' ? 16 : 40,
-    left: 20,
-    zIndex: 20,
-    backgroundColor: '#E6F0FF',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 3,
+    top: 40,
+    left: 16,
+    zIndex: 10,
   },
   backText: {
     color: '#007AFF',
@@ -373,7 +356,7 @@ const styles = StyleSheet.create({
   },
   opcaoButton: {
     paddingVertical: 12,
-    paddingHorizontal: 14,
+    paddingHorizontal: 18,
     borderRadius: 10,
     backgroundColor: '#f2f2f2',
     marginBottom: 10,
@@ -386,7 +369,7 @@ const styles = StyleSheet.create({
   },
   opcaoTexto: {
     color: '#333',
-    fontSize: 15,
+    fontSize: 16,
   },
   opcaoTextoSelecionado: {
     color: '#fff',
@@ -394,32 +377,27 @@ const styles = StyleSheet.create({
   },
   footerButtons: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
+    gap: 12,
     marginTop: 32,
-    alignItems: 'center',
+    paddingHorizontal: 6,
   },
-  voltarButton: {
-    paddingVertical: 14,
-    paddingHorizontal: 24,
+  navButtonCinza: {
     backgroundColor: '#ccc',
-    borderRadius: 8,
-    marginRight: 'auto',
+    padding: 12,
+    borderRadius: 30,
+    width: 48,
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  voltarText: {
-    color: '#333',
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  submitButton: {
+  navButtonAzul: {
     backgroundColor: '#007AFF',
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    marginLeft: 'auto',
-  },
-  submitButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
+    padding: 12,
+    borderRadius: 30,
+    width: 48,
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });
