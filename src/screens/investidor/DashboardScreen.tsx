@@ -105,9 +105,10 @@ export default function DashboardScreen() {
   if (loading) {
     return (
       <SafeAreaView style={styles.safeContainer}>
-        <View style={[styles.scrollContent, { justifyContent: 'center', alignItems: 'center' }]}>
+        <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#007AFF" />
-          <Text style={{ marginTop: 12 }}>Carregando seu perfil...</Text>
+          <Text style={styles.loadingTitle}>Carregando informações...</Text>
+          <Text style={styles.loadingSubtitle}>Estamos preparando seu dashboard personalizado.</Text>
         </View>
       </SafeAreaView>
     );
@@ -267,4 +268,23 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     width: '100%',
   },
+loadingContainer: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingHorizontal: 32,
+  backgroundColor: '#FAFAFA',
+},
+loadingTitle: {
+  marginTop: 20,
+  fontSize: 18,
+  fontWeight: '600',
+  color: '#333',
+},
+loadingSubtitle: {
+  fontSize: 14,
+  color: '#888',
+  marginTop: 6,
+  textAlign: 'center',
+}
 });

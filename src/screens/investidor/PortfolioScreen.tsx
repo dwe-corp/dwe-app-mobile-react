@@ -51,10 +51,13 @@ export default function PortfolioScreen() {
 
   if (loading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#007AFF" />
-        <Text style={styles.loadingText}>Carregando seu portfólio...</Text>
-      </View>
+      <SafeAreaView style={styles.safeContainer}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#007AFF" />
+          <Text style={styles.loadingTitle}>Aguarde um instante...</Text>
+          <Text style={styles.loadingSubtitle}>Estamos preparando seu portfólio personalizado.</Text>
+        </View>
+      </SafeAreaView>
     );
   }
 
@@ -256,4 +259,23 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     width: '100%',
   },
+loadingContainer: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingHorizontal: 32,
+  backgroundColor: '#FAFAFA',
+},
+loadingTitle: {
+  marginTop: 20,
+  fontSize: 18,
+  fontWeight: '600',
+  color: '#333',
+},
+loadingSubtitle: {
+  fontSize: 14,
+  color: '#888',
+  marginTop: 6,
+  textAlign: 'center',
+}
 });
