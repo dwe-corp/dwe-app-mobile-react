@@ -21,7 +21,7 @@ export default function LembretesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === 'web' ? 24 : 48, // topo para web/mobile
+    paddingTop: Platform.OS === 'web' ? 24 : 48,
     paddingHorizontal: 20,
     backgroundColor: '#f8f8f8',
   },

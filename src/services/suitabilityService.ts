@@ -37,7 +37,6 @@ export const getUserRiskProfile = async (email: string): Promise<string | null> 
     const response = await api.get(`http://192.168.0.14:8082/suitability?email=${email}`);
     console.log('Resposta da API de perfil de risco:', response.data);
 
-    // Corrigido: agora pega o primeiro cliente da lista
     const primeiroCliente = response.data?.[0];
     const risco = primeiroCliente?.risco;
 

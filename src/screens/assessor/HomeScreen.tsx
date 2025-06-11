@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function HomeScreen() {
   const { logout, userName } = useAuth();
-  const navigation = useNavigation(); // <-- necessário para navegação funcionar
+  const navigation = useNavigation();
 
   const cards = [
     {
