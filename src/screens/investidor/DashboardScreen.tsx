@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
-  Dimensions,
   Image,
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
@@ -21,9 +20,6 @@ export default function DashboardScreen() {
 
   const [perfil, setPerfil] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const screenWidth = Dimensions.get('window').width;
-  const isMobile = screenWidth < 768;
 
   useEffect(() => {
     const fetchPerfil = async () => {
@@ -109,7 +105,7 @@ export default function DashboardScreen() {
   if (loading) {
     return (
       <SafeAreaView style={styles.safeContainer}>
-        <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <View style={[styles.scrollContent, { justifyContent: 'center', alignItems: 'center' }]}>
           <ActivityIndicator size="large" color="#007AFF" />
           <Text style={{ marginTop: 12 }}>Carregando seu perfil...</Text>
         </View>
@@ -119,7 +115,7 @@ export default function DashboardScreen() {
 
   return (
     <SafeAreaView style={styles.safeContainer}>
-      <ScrollView contentContainerStyle={[styles.container, isMobile && styles.containerMobile]}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.topBar}>
           <Text style={styles.header}>Olá, {userName || 'Investidor'}</Text>
 
@@ -182,14 +178,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FAFAFA',
   },
-  container: {
-    paddingTop: 24,
-    paddingBottom: 40,
+  scrollContent: {
     paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 40,
     flexGrow: 1,
-  },
-  containerMobile: {
-    paddingHorizontal: 12,
   },
   topBar: {
     flexDirection: 'row',
