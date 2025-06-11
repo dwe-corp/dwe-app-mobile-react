@@ -8,13 +8,14 @@ import {
   StyleSheet,
   ActivityIndicator,
   Dimensions,
+  Image,
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { getUserRiskProfile } from '../../services/suitabilityService';
 
 export default function DashboardScreen() {
-  const { logout, userName, userEmail } = useAuth();
+  const { userName, userEmail } = useAuth();
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
@@ -29,9 +30,15 @@ export default function DashboardScreen() {
       if (!userEmail) return;
 
       setLoading(true);
-      const perfilRisco = await getUserRiskProfile(userEmail);
-      setPerfil(perfilRisco);
-      setLoading(false);
+      try {
+        const perfilRisco = await getUserRiskProfile(userEmail);
+        setPerfil(perfilRisco);
+      } catch (error) {
+        console.log('Usuário ainda não tem perfil registrado.');
+        setPerfil(null);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchPerfil();
@@ -72,24 +79,28 @@ export default function DashboardScreen() {
       desc: 'Descubra seu perfil de investidor e receba recomendações.',
       button: 'Iniciar Teste',
       route: 'PerfilInvestidor',
+      image: require('../../assets/teste.png'),
     },
     {
       title: 'Atualizações de Mercado',
       desc: 'Receba boletins semanais com as principais tendências.',
       button: 'Ler Agora',
       route: 'Atualizacoes',
+      image: require('../../assets/news-home.png'),
     },
     {
       title: 'Investimentos',
       desc: 'Explore opções de fundos com explicações simples.',
       button: 'Ver Fundos',
       route: 'Fundos',
+      image: require('../../assets/chart-home.png'),
     },
     {
       title: 'Assistente com IA',
       desc: 'Receba suporte inteligente para decisões de investimento.',
       button: 'Conversar Agora',
       route: 'IA',
+      image: require('../../assets/robot.png'),
     },
   ];
 
@@ -113,7 +124,7 @@ export default function DashboardScreen() {
           <Text style={styles.header}>Olá, {userName || 'Investidor'}</Text>
 
           <View style={styles.rightButtons}>
-            {perfil && (
+            {perfil ? (
               <View
                 style={[
                   styles.perfilBadge,
@@ -127,50 +138,58 @@ export default function DashboardScreen() {
                   Perfil: {perfil}
                 </Text>
               </View>
+            ) : (
+              <View
+                style={[
+                  styles.perfilBadge,
+                  { backgroundColor: '#f0f0f0', borderColor: '#ccc' },
+                ]}
+              >
+                <Text style={[styles.perfilText, { color: '#888' }]}>
+                  Perfil não definido
+                </Text>
+              </View>
             )}
           </View>
         </View>
 
-        <View style={[styles.grid, isMobile && styles.gridMobile]}>
-          {cards.map((item, idx) => (
-            <View
-              key={idx}
-              style={[
-                styles.card,
-                isMobile ? styles.cardMobile : styles.cardWeb,
-              ]}
+        {cards.map((item, idx) => (
+          <React.Fragment key={idx}>
+            <TouchableOpacity
+              style={styles.cardRow}
+              onPress={() => navigation.navigate(item.route)}
             >
-              <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.desc}>{item.desc}</Text>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.navigate(item.route)}
-              >
-                <Text style={styles.buttonText}>{item.button}</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
+              <View style={styles.cardText}>
+                <Text style={styles.cardTitle}>{item.title}</Text>
+                <Text style={styles.cardDescription}>{item.desc}</Text>
+                <View style={styles.button}>
+                  <Text style={styles.buttonText}>{item.button}</Text>
+                </View>
+              </View>
+              <Image source={item.image} style={styles.cardImage} />
+            </TouchableOpacity>
+
+            {idx !== cards.length - 1 && <View style={styles.separator} />}
+          </React.Fragment>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-const CARD_GAP = 16;
-
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#FAFAFA',
   },
   container: {
     paddingTop: 24,
     paddingBottom: 40,
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     flexGrow: 1,
   },
   containerMobile: {
-    paddingHorizontal: 8,
+    paddingHorizontal: 12,
   },
   topBar: {
     flexDirection: 'row',
@@ -178,21 +197,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 24,
   },
-  rightButtons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   header: {
     fontSize: 24,
     fontWeight: '700',
     color: '#222',
+  },
+  rightButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   perfilBadge: {
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 20,
     borderWidth: 1,
-    marginRight: 8,
     shadowColor: '#000',
     shadowOpacity: 0.06,
     shadowOffset: { width: 0, height: 1 },
@@ -203,62 +221,57 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 13,
   },
-  grid: {
+  cardRow: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  gridMobile: {
-    flexDirection: 'column',
-  },
-  card: {
     backgroundColor: '#fff',
     borderRadius: 16,
-    padding: 20,
-    marginBottom: CARD_GAP,
-    minHeight: 160,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 16,
+    marginBottom: 20,
     shadowColor: '#000',
-    shadowOpacity: 0.06,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 1 },
     shadowRadius: 4,
     elevation: 2,
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  cardWeb: {
-    flexBasis: '48%',
-    marginLeft: CARD_GAP / 2,
-    marginRight: CARD_GAP / 2,
+  cardText: {
+    flex: 1,
+    marginRight: 12,
   },
-  cardMobile: {
-    width: '100%',
-  },
-  title: {
+  cardTitle: {
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '600',
+    marginBottom: 4,
     color: '#111',
-    textAlign: 'center',
-    marginBottom: 8,
   },
-  desc: {
+  cardDescription: {
     fontSize: 14,
     color: '#555',
-    textAlign: 'center',
-    lineHeight: 20,
-    marginBottom: 16,
-    maxWidth: 220,
+    marginBottom: 12,
   },
   button: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 8,
-    paddingHorizontal: 20,
+    backgroundColor: '#E8E8E8',
     borderRadius: 8,
-    maxWidth: 180,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    alignSelf: 'flex-start',
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: '600',
     fontSize: 14,
-    textAlign: 'center',
+    fontWeight: '500',
+    color: '#333',
+  },
+  cardImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 12,
+    resizeMode: 'cover',
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#eee',
+    marginVertical: 20,
+    width: '100%',
   },
 });
