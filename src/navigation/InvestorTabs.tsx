@@ -17,10 +17,10 @@ export default function InvestorTabs() {
         tabBarIcon: ({ color, size }) => {
           let iconName = 'ellipse-outline';
 
-          if (route.name === 'Dashboard') iconName = 'home-outline';
-          else if (route.name === 'Portfolio') iconName = 'pie-chart-outline';
+          if (route.name === 'Home') iconName = 'home-outline';
+          else if (route.name === 'portfólio') iconName = 'pie-chart-outline';
           else if (route.name === 'Learn') iconName = 'book-outline';
-          else if (route.name === 'Profile') iconName = 'person-outline';
+          else if (route.name === 'Perfil') iconName = 'person-outline';
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -29,10 +29,10 @@ export default function InvestorTabs() {
         tabBarLabelStyle: { fontSize: 12 },
       })}
     >
-      <Tab.Screen name="Dashboard" component={DashboardScreen} />
-      <Tab.Screen name="Portfolio" component={PortfolioScreen} />
+      <Tab.Screen name="Home" component={DashboardScreen} />
+      <Tab.Screen name="portfólio" component={PortfolioScreen} />
       <Tab.Screen name="Learn" component={AprendaScreen} />
-      <Tab.Screen name="Profile" component={PerfilScreen} />
+      <Tab.Screen name="Perfil" component={PerfilScreen} />
     </Tab.Navigator>
   );
 }
