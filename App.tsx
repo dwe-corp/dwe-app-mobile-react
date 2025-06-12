@@ -7,15 +7,21 @@ import RegisterScreen from './src/screens/RegisterScreen';
 import InvestorTabs from './src/navigation/InvestorTabs';
 import AssessorTabs from './src/navigation/AssessorTabs';
 
-import SimuladorScreen from './src/screens/assessor/funcionalidades/SimuladorScreen';
+import SimuladorAssessorScreen from './src/screens/assessor/funcionalidades/SimuladorAssessorScreen';
 import ChatScreen from './src/screens/assessor/funcionalidades/ChatScreen';
-import LembretesScreen from './src/screens/assessor/funcionalidades/LembretesScreen';
+import LembretesAssessorScreen from './src/screens/assessor/funcionalidades/LembretesAssessorScreen';
 import RelatoriosScreen from './src/screens/assessor/funcionalidades/RelatoriosScreen';
 
-import AtualizacoesScreen from './src/screens/investidor/funcionalidades/AtualizacoesScreen';
+
 import PerfilInvestidorScreen from './src/screens/investidor/funcionalidades/PerfilInvestidorScreen';
 import FundosScreen from './src/screens/investidor/funcionalidades/FundosScreen';
 import IAScreen from './src/screens/investidor/funcionalidades/IAScreen';
+import AtualizacoesInvestidorScreen from './src/screens/investidor/funcionalidades/AtualizacoesInvestidorScreen';
+import PortfolioInvestidorScreen from './src/screens/investidor/funcionalidades/PortfolioInvestidorScreen';
+import SimuladorInvestidorScreen from './src/screens/investidor/funcionalidades/SimuladorInvestidorScreen';
+import LembretesInvestidorScreen from './src/screens/investidor/funcionalidades/LembretesInvestidorScreen';
+import ConfiguracoesInvestidorScreen from './src/screens/investidor/funcionalidades/ConfiguracoesInvestidorScreen';
+import FormularioInvestidorScreen from './src/screens/investidor/funcionalidades/FormularioInvestidorScreen';
 
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 
@@ -40,16 +46,21 @@ function AppRoutes() {
           )}
 
           {/* Telas extras do Assessor acessadas por botão */}
-          <Stack.Screen name="Simulador" component={SimuladorScreen} />
+          <Stack.Screen name="SimuladorAssessor" component={SimuladorAssessorScreen} />
           <Stack.Screen name="Chat" component={ChatScreen} />
-          <Stack.Screen name="Lembretes" component={LembretesScreen} />
+          <Stack.Screen name="LembretesAssessor" component={LembretesAssessorScreen} />
           <Stack.Screen name="Relatorios" component={RelatoriosScreen} />
           
           {/* Telas extras do Investidor acessadas por botão */}
-          <Stack.Screen name="Atualizacoes" component={AtualizacoesScreen} />
           <Stack.Screen name="PerfilInvestidor" component={PerfilInvestidorScreen} />
           <Stack.Screen name="Fundos" component={FundosScreen} />
           <Stack.Screen name="IA" component={IAScreen} />
+          <Stack.Screen name="AtualizacoesInvestidor" component={AtualizacoesInvestidorScreen} />
+          <Stack.Screen name="PortfolioInvestidor" component={PortfolioInvestidorScreen} />
+          <Stack.Screen name="SimuladorInvestidor" component={SimuladorInvestidorScreen} />
+          <Stack.Screen name="LembretesInvestidor" component={LembretesInvestidorScreen} />
+          <Stack.Screen name="ConfiguracoesInvestidor" component={ConfiguracoesInvestidorScreen} />
+          <Stack.Screen name="FormularioInvestidor" component={FormularioInvestidorScreen} />
 
         </>
       )}

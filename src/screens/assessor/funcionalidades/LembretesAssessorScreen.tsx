@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-export default function SimuladorScreen() {
+export default function LembretesAssessorScreen() {
   const navigation = useNavigation();
 
   return (

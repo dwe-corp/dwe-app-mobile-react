@@ -1,14 +1,15 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
-export default function LembretesScreen() {
+export default function PortfolioInvestidorScreen() {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-        <Text style={styles.backText}>← Voltar</Text>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Ionicons name="chevron-back" size={24} color="black" />
       </TouchableOpacity>
 
       <View style={styles.content}>
@@ -27,14 +28,14 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: Platform.OS === 'web' ? 16 : 40,
-    left: 20,
+    top: 40,
+    left: 16,
     zIndex: 10,
   },
   backText: {
     color: '#007AFF',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
   content: {
     flex: 1,

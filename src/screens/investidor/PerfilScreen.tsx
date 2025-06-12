@@ -87,7 +87,7 @@ export default function ProfileScreen() {
 
         <TouchableOpacity
           style={styles.optionButton}
-          onPress={() => navigation.navigate('ConfigConta')}
+          onPress={() => navigation.navigate('ConfiguracoesInvestidor')}
         >
           <Ionicons name="settings-outline" size={20} color="#333" style={styles.icon} />
           <Text style={styles.optionText}>Configurações da Conta</Text>
@@ -95,7 +95,7 @@ export default function ProfileScreen() {
 
         <TouchableOpacity
           style={styles.optionButton}
-          onPress={() => navigation.navigate('FormularioCadastro')}
+          onPress={() => navigation.navigate('FormularioInvestidor')}
         >
           <Ionicons name="document-text-outline" size={20} color="#333" style={styles.icon} />
           <Text style={styles.optionText}>Formulário de Cadastro</Text>

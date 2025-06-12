@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function AtualizacoesScreen() {
+export default function SimuladorInvestidorScreen() {
   const navigation = useNavigation();
 
   return (

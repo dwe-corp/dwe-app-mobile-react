@@ -8,8 +8,11 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function InsightsScreen() {
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView style={styles.safeContainer}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -21,7 +24,10 @@ export default function InsightsScreen() {
             <Text style={styles.cardDescription}>
               Mantenha-se à frente com análises especializadas sobre tendências e oportunidades do mercado.
             </Text>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('AtualizacoesInvestidor')}
+            >
               <Text style={styles.buttonText}>Leia Agora</Text>
             </TouchableOpacity>
           </View>
@@ -34,13 +40,17 @@ export default function InsightsScreen() {
         <View style={styles.separator} />
 
         <Text style={styles.sectionTitle}>Indicadores de Performance</Text>
+
         <View style={styles.cardRow}>
           <View style={styles.cardText}>
             <Text style={styles.cardTitle}>Portfólio</Text>
             <Text style={styles.cardDescription}>
               Acesse relatórios detalhados de desempenho, incluindo alocação de ativos e retornos.
             </Text>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('PortfolioInvestidor')}
+            >
               <Text style={styles.buttonText}>Ver Relatórios</Text>
             </TouchableOpacity>
           </View>
@@ -60,7 +70,10 @@ export default function InsightsScreen() {
             <Text style={styles.cardDescription}>
               Experimente diferentes estratégias de investimento e simule o desempenho da carteira.
             </Text>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('SimuladorInvestidor')}
+            >
               <Text style={styles.buttonText}>Simular</Text>
             </TouchableOpacity>
           </View>
@@ -78,7 +91,10 @@ export default function InsightsScreen() {
             <Text style={styles.cardDescription}>
               Configure lembretes automáticos para revisões de carteira e datas importantes.
             </Text>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('LembretesInvestidor')}
+            >
               <Text style={styles.buttonText}>Criar Lembretes</Text>
             </TouchableOpacity>
           </View>

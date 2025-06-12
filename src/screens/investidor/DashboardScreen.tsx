@@ -81,7 +81,7 @@ export default function DashboardScreen() {
       title: 'Atualizações de Mercado',
       desc: 'Receba boletins semanais com as principais tendências.',
       button: 'Ler Agora',
-      route: 'Atualizacoes',
+      route: 'AtualizacoesInvestidor',
       image: require('../../assets/news-home.png'),
     },
     {
