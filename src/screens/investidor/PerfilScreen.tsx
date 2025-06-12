@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -7,14 +7,50 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { getUserRiskProfile } from '../../services/suitabilityService';
 
 export default function ProfileScreen() {
   const { userName, userEmail, userProfile, logout } = useAuth();
+  const [riskProfile, setRiskProfile] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchPerfil = async () => {
+      if (!userEmail) return;
+
+      setLoading(true);
+      try {
+        const perfilRisco = await getUserRiskProfile(userEmail);
+        setRiskProfile(perfilRisco);
+      } catch (error) {
+        console.log('Erro ao buscar perfil de risco');
+        setRiskProfile(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPerfil();
+  }, [userEmail, isFocused]);
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.safeContainer}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#007AFF" />
+          <Text style={styles.loadingTitle}>Carregando perfil...</Text>
+          <Text style={styles.loadingSubtitle}>Estamos buscando suas informações.</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeContainer}>
@@ -33,12 +69,18 @@ export default function ProfileScreen() {
           <Ionicons name="mail-outline" size={20} color="#333" style={styles.icon} />
           <View style={{ flex: 1 }}>
             <Text style={styles.optionLabel}>Email</Text>
-            <Text
-              style={styles.optionValue}
-              numberOfLines={1}
-              ellipsizeMode="tail"
-            >
+            <Text style={styles.optionValue} numberOfLines={1} ellipsizeMode="tail">
               {userEmail}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.optionBox}>
+          <Ionicons name="shield-outline" size={20} color="#333" style={styles.icon} />
+          <View style={{ flex: 1 }}>
+            <Text style={styles.optionLabel}>Perfil de investidor</Text>
+            <Text style={styles.optionValue}>
+              {riskProfile ?? 'Perfil não definido'}
             </Text>
           </View>
         </View>
@@ -82,7 +124,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    alignSelf: 'center',
     marginBottom: 12,
     backgroundColor: '#f2f2f2',
     shadowColor: '#000',
@@ -163,5 +204,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#D9534F',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 32,
+    backgroundColor: '#fff',
+  },
+  loadingTitle: {
+    marginTop: 20,
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+  },
+  loadingSubtitle: {
+    fontSize: 14,
+    color: '#888',
+    marginTop: 6,
+    textAlign: 'center',
   },
 });
