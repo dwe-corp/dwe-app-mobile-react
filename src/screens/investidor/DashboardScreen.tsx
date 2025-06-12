@@ -118,7 +118,9 @@ export default function DashboardScreen() {
     <SafeAreaView style={styles.safeContainer}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.topBar}>
-          <Text style={styles.header}>Olá, {userName || 'Investidor'}</Text>
+          <Text style={styles.header} numberOfLines={1} ellipsizeMode="tail">
+            Olá, {(userName?.split(' ')[0]) || 'Investidor'}
+          </Text>
 
           <View style={styles.rightButtons}>
             {perfil ? (
@@ -195,6 +197,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     color: '#222',
+    maxWidth: '70%',
+    flexShrink: 1,
+    overflow: 'hidden',
   },
   rightButtons: {
     flexDirection: 'row',
