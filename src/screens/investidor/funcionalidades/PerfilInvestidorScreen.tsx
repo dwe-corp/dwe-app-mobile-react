@@ -6,7 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  Platform,
   Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -27,161 +26,161 @@ export default function PerfilInvestidorScreen() {
     {
       titulo: '1. Qual é seu principal objetivo com os investimentos?',
       opcoes: [
-        'A) Preservar meu capital com segurança.',
-        'B) Obter rendimentos regulares e moderados.',
-        'C) Maximizar ganhos, aceitando riscos maiores.',
+        'Preservar meu capital com segurança.',
+        'Obter rendimentos regulares e moderados.',
+        'Maximizar ganhos, aceitando riscos maiores.',
       ],
     },
     {
       titulo: '2. Qual seu nível de conhecimento sobre investimentos?',
       opcoes: [
-        'A) Nenhum ou muito básico.',
-        'B) Intermediário.',
-        'C) Avançado ou profissional.',
+        'Nenhum ou muito básico.',
+        'Intermediário.',
+        'Avançado ou profissional.',
       ],
     },
     {
       titulo: '3. Qual seu horizonte de investimento?',
       opcoes: [
-        'A) Curto prazo (até 1 ano).',
-        'B) Médio prazo (1 a 5 anos).',
-        'C) Longo prazo (mais de 5 anos).',
+        'Curto prazo (até 1 ano).',
+        'Médio prazo (1 a 5 anos).',
+        'Longo prazo (mais de 5 anos).',
       ],
     },
     {
       titulo: '4. Você já investiu em ações ou fundos de ações?',
       opcoes: [
-        'A) Nunca.',
-        'B) Sim, mas com valores pequenos.',
-        'C) Sim, com frequência e valores relevantes.',
+        'Nunca.',
+        'Sim, mas com valores pequenos.',
+        'Sim, com frequência e valores relevantes.',
       ],
     },
     {
       titulo: '5. Qual a sua idade?',
       opcoes: [
-        'A) Acima de 60 anos.',
-        'B) Entre 36 e 59 anos.',
-        'C) Até 35 anos.',
+        'Acima de 60 anos.',
+        'Entre 36 e 59 anos.',
+        'Até 35 anos.',
       ],
     },
     {
       titulo: '6. Qual é a sua principal fonte de renda?',
       opcoes: [
-        'A) Salário fixo.',
-        'B) Renda variável com certa estabilidade.',
-        'C) Empreendimentos ou renda variável instável.',
+        'Salário fixo.',
+        'Renda variável com certa estabilidade.',
+        'Empreendimentos ou renda variável instável.',
       ],
     },
     {
       titulo: '7. Qual é a sua renda mensal média?',
       opcoes: [
-        'A) Até R$5.000.',
-        'B) De R$5.000 a R$15.000.',
-        'C) Acima de R$15.000.',
+        'Até R$5.000.',
+        'De R$5.000 a R$15.000.',
+        'Acima de R$15.000.',
       ],
     },
     {
       titulo: '8. Qual o percentual da sua renda que pode ser investido?',
       opcoes: [
-        'A) Até 10%.',
-        'B) Entre 10% e 30%.',
-        'C) Mais de 30%.',
+        'Até 10%.',
+        'Entre 10% e 30%.',
+        'Mais de 30%.',
       ],
     },
     {
       titulo: '9. Possui reserva de emergência (3 a 6 meses de despesas)?',
       opcoes: [
-        'A) Não.',
-        'B) Parcialmente.',
-        'C) Sim.',
+        'Não.',
+        'Parcialmente.',
+        'Sim.',
       ],
     },
     {
       titulo: '10. Como você reagiria se seus investimentos caíssem 10% em uma semana?',
       opcoes: [
-        'A) Venderia tudo imediatamente.',
-        'B) Aguardaria para entender o cenário.',
-        'C) Veria como oportunidade para comprar mais.',
+        'Venderia tudo imediatamente.',
+        'Aguardaria para entender o cenário.',
+        'Veria como oportunidade para comprar mais.',
       ],
     },
     {
       titulo: '11. Você já investiu em fundos multimercado ou cambiais?',
       opcoes: [
-        'A) Não.',
-        'B) Sim, mas com receio.',
-        'C) Sim, sem problemas.',
+        'Não.',
+        'Sim, mas com receio.',
+        'Sim, sem problemas.',
       ],
     },
     {
       titulo: '12. Já teve perdas superiores a 10% em investimentos?',
       opcoes: [
-        'A) Não e não estou disposto a correr esse risco.',
-        'B) Sim, mas fiquei desconfortável.',
-        'C) Sim, e considero parte do processo.',
+        'Não e não estou disposto a correr esse risco.',
+        'Sim, mas fiquei desconfortável.',
+        'Sim, e considero parte do processo.',
       ],
     },
     {
       titulo: '13. Qual a composição ideal de sua carteira?',
       opcoes: [
-        'A) 100% renda fixa.',
-        'B) Maioria renda fixa com pequena parte variável.',
-        'C) Diversificada com significativa parte em renda variável.',
+        '100% renda fixa.',
+        'Maioria renda fixa com pequena parte variável.',
+        'Diversificada com significativa parte em renda variável.',
       ],
     },
     {
       titulo: '14. Como você descreveria sua experiência com investimentos?',
       opcoes: [
-        'A) Nenhuma.',
-        'B) Alguma experiência.',
-        'C) Experiente.',
+        'Nenhuma.',
+        'Alguma experiência.',
+        'Experiente.',
       ],
     },
     {
       titulo: '15. Você entende o que são produtos como COE, FIDC ou Debêntures?',
       opcoes: [
-        'A) Não conheço.',
-        'B) Já ouvi falar.',
-        'C) Sim, conheço e já investi.',
+        'Não conheço.',
+        'Já ouvi falar.',
+        'Sim, conheço e já investi.',
       ],
     },
     {
       titulo: '16. Com que frequência você acompanha seus investimentos?',
       opcoes: [
-        'A) Raramente.',
-        'B) Mensalmente.',
-        'C) Diariamente ou semanalmente.',
+        'Raramente.',
+        'Mensalmente.',
+        'Diariamente ou semanalmente.',
       ],
     },
     {
       titulo: '17. Você já investiu em produtos internacionais?',
       opcoes: [
-        'A) Nunca.',
-        'B) Tenho interesse, mas não investi ainda.',
-        'C) Sim.',
+        'Nunca.',
+        'Tenho interesse, mas não investi ainda.',
+        'Sim.',
       ],
     },
     {
       titulo: '18. Você tem dívidas em aberto?',
       opcoes: [
-        'A) Sim.',
-        'B) Algumas, mas controladas.',
-        'C) Não.',
+        'Sim.',
+        'Algumas, mas controladas.',
+        'Não.',
       ],
     },
     {
       titulo: '19. Você se considera emocional ao lidar com dinheiro?',
       opcoes: [
-        'A) Sim, muito.',
-        'B) Um pouco.',
-        'C) Não, sou racional.',
+        'Sim, muito.',
+        'Um pouco.',
+        'Não, sou racional.',
       ],
     },
     {
       titulo: '20. Em uma crise de mercado, qual seria sua reação?',
       opcoes: [
-        'A) Resgatar tudo para evitar mais perdas.',
-        'B) Esperar até os mercados estabilizarem.',
-        'C) Aproveitar para investir mais.',
+        'Resgatar tudo para evitar mais perdas.',
+        'Esperar até os mercados estabilizarem.',
+        'Aproveitar para investir mais.',
       ],
     },
   ];
@@ -192,8 +191,7 @@ export default function PerfilInvestidorScreen() {
   const paginaFinal = fim >= perguntas.length;
 
   const handleSelecionar = (index, opcao) => {
-    const chave = opcao.charAt(0);
-    setRespostas({ ...respostas, [index]: chave });
+    setRespostas({ ...respostas, [index]: opcao });
     setErros({ ...erros, [index]: false });
   };
 
@@ -216,10 +214,12 @@ export default function PerfilInvestidorScreen() {
     if (paginaFinal) {
       try {
         const contagem = { A: 0, B: 0, C: 0 };
-        Object.values(respostas).forEach(resposta => {
-          if (resposta === 'A') contagem.A++;
-          if (resposta === 'B') contagem.B++;
-          if (resposta === 'C') contagem.C++;
+        Object.entries(respostas).forEach(([index, resposta]) => {
+          const idx = parseInt(index);
+          const opcaoIndex = perguntas[idx].opcoes.indexOf(resposta);
+          if (opcaoIndex === 0) contagem.A++;
+          if (opcaoIndex === 1) contagem.B++;
+          if (opcaoIndex === 2) contagem.C++;
         });
 
         if (!userName || !userEmail) {
@@ -282,55 +282,42 @@ export default function PerfilInvestidorScreen() {
                 {pergunta.opcoes.map((opcao, idx) => (
                   <TouchableOpacity
                     key={idx}
-                    style={[
-                      styles.opcaoButton,
-                      respostas[perguntaIndex] === opcao.charAt(0) &&
-                        styles.opcaoSelecionada,
-                    ]}
+                    style={styles.opcaoButton}
                     onPress={() => handleSelecionar(perguntaIndex, opcao)}
+                    activeOpacity={0.8}
                   >
-                    <Text
-                      style={[
-                        styles.opcaoTexto,
-                        respostas[perguntaIndex] === opcao.charAt(0) &&
-                          styles.opcaoTextoSelecionado,
-                      ]}
-                    >
-                      {opcao}
-                    </Text>
+                    <View style={styles.radioContent}>
+                      <View
+                        style={[
+                          styles.radioOuter,
+                          respostas[perguntaIndex] === opcao && styles.radioOuterSelected,
+                        ]}
+                      >
+                        {respostas[perguntaIndex] === opcao && <View style={styles.radioInner} />}
+                      </View>
+                      <Text
+                        style={[
+                          styles.opcaoTexto,
+                          respostas[perguntaIndex] === opcao && styles.opcaoTextoSelecionado,
+                        ]}
+                      >
+                        {opcao}
+                      </Text>
+                    </View>
                   </TouchableOpacity>
                 ))}
               </View>
             );
           })}
 
-          <View
-            style={[
-              styles.footerButtons,
-              {
-                justifyContent:
-                  paginaAtual > 0 ? 'space-between' : 'flex-end',
-              },
-            ]}
-          >
+          <View style={[styles.footerButtons, { justifyContent: paginaAtual > 0 ? 'space-between' : 'flex-end' }]}>
             {paginaAtual > 0 && (
-              <TouchableOpacity
-                style={styles.navButtonCinza}
-                onPress={handleVoltar}
-              >
+              <TouchableOpacity style={styles.navButtonCinza} onPress={handleVoltar}>
                 <Ionicons name="chevron-back" size={24} color="#333" />
               </TouchableOpacity>
             )}
-
-            <TouchableOpacity
-              style={styles.navButtonAzul}
-              onPress={handleAvancar}
-            >
-              <Ionicons
-                name={paginaFinal ? 'checkmark' : 'chevron-forward'}
-                size={24}
-                color="#fff"
-              />
+            <TouchableOpacity style={styles.navButtonAzul} onPress={handleAvancar}>
+              <Ionicons name={paginaFinal ? 'checkmark' : 'chevron-forward'} size={24} color="#fff" />
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -372,7 +359,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eaeaea',
   },
-  perguntaErro: {
+  perguntaErro: { 
     borderColor: 'red',
   },
   perguntaTitulo: {
@@ -391,17 +378,36 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
   },
-  opcaoSelecionada: {
+  radioContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  radioOuter: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#ccc',
+    marginRight: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  radioOuterSelected: {
+    borderColor: '#007AFF',
+  },
+  radioInner: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
     backgroundColor: '#007AFF',
-    borderColor: '#005FCC',
   },
   opcaoTexto: {
-    color: '#333',
     fontSize: 16,
+    color: '#333',
   },
   opcaoTextoSelecionado: {
-    color: '#fff',
     fontWeight: '600',
+    color: '#007AFF',
   },
   footerButtons: {
     flexDirection: 'row',
