@@ -8,6 +8,7 @@ interface AuthContextType {
   userEmail: string | null;
   login: (profile: 'INVESTIDOR' | 'ASSESSOR', nome: string, email: string) => Promise<void>;
   logout: () => Promise<void>;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -17,6 +18,7 @@ const AuthContext = createContext<AuthContextType>({
   userEmail: null,
   login: async () => {},
   logout: async () => {},
+  loading: true
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -24,6 +26,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [userProfile, setUserProfile] = useState<'INVESTIDOR' | 'ASSESSOR' | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
@@ -40,6 +43,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (nome) setUserName(nome);
       if (email) setUserEmail(email);
+
+      setLoading(false);
     };
 
     loadData();
@@ -75,6 +80,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         userEmail,
         login,
         logout,
+        loading
       }}
     >
       {children}

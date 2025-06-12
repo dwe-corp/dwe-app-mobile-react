@@ -1,4 +1,11 @@
 import React from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  SafeAreaView,
+} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -11,7 +18,6 @@ import SimuladorAssessorScreen from './src/screens/assessor/funcionalidades/Simu
 import ChatScreen from './src/screens/assessor/funcionalidades/ChatScreen';
 import LembretesAssessorScreen from './src/screens/assessor/funcionalidades/LembretesAssessorScreen';
 import RelatoriosScreen from './src/screens/assessor/funcionalidades/RelatoriosScreen';
-
 
 import PerfilInvestidorScreen from './src/screens/investidor/funcionalidades/PerfilInvestidorScreen';
 import FundosScreen from './src/screens/investidor/funcionalidades/FundosScreen';
@@ -28,7 +34,19 @@ import { AuthProvider, useAuth } from './src/context/AuthContext';
 const Stack = createNativeStackNavigator();
 
 function AppRoutes() {
-  const { isAuthenticated, userProfile } = useAuth();
+  const { isAuthenticated, userProfile, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#007AFF" />
+          <Text style={styles.loadingTitle}>Carregando informações...</Text>
+          <Text style={styles.loadingSubtitle}>Estamos preparando seu aplicativo.</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -50,7 +68,7 @@ function AppRoutes() {
           <Stack.Screen name="Chat" component={ChatScreen} />
           <Stack.Screen name="LembretesAssessor" component={LembretesAssessorScreen} />
           <Stack.Screen name="Relatorios" component={RelatoriosScreen} />
-          
+
           {/* Telas extras do Investidor acessadas por botão */}
           <Stack.Screen name="PerfilInvestidor" component={PerfilInvestidorScreen} />
           <Stack.Screen name="Fundos" component={FundosScreen} />
@@ -61,7 +79,6 @@ function AppRoutes() {
           <Stack.Screen name="LembretesInvestidor" component={LembretesInvestidorScreen} />
           <Stack.Screen name="ConfiguracoesInvestidor" component={ConfiguracoesInvestidorScreen} />
           <Stack.Screen name="FormularioInvestidor" component={FormularioInvestidorScreen} />
-
         </>
       )}
     </Stack.Navigator>
@@ -77,3 +94,25 @@ export default function App() {
     </AuthProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 32,
+    backgroundColor: '#FAFAFA',
+  },
+  loadingTitle: {
+    marginTop: 20,
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+  },
+  loadingSubtitle: {
+    fontSize: 14,
+    color: '#888',
+    marginTop: 6,
+    textAlign: 'center',
+  },
+});

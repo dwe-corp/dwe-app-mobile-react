@@ -85,7 +85,7 @@ export default function DashboardScreen() {
       image: require('../../assets/chart-home.png'),
     },
     {
-      title: 'Assistente com IA',
+      title: 'Fale com a Nina',
       desc: 'Receba suporte inteligente para decisões de investimento.',
       button: 'Conversar Agora',
       route: 'IA',
