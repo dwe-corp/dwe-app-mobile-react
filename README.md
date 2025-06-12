@@ -26,7 +26,8 @@ Este projeto é uma aplicação **React Native** com **AsyncStorage** que oferec
 
 ### Para assessores:
 - Tela de clientes
-- Tela de investimentos e configurações
+- Tela de investimentos
+- Tela de configurações
 
 ### Recursos gerais:
 - Login e cadastro com persistência de sessão (JWT via AsyncStorage)
