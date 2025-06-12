@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingTop: 60,
-    paddingBottom: 120,
+    paddingBottom: 30,
   },
   perguntaContainer: {
     marginBottom: 28,
@@ -406,7 +406,6 @@ const styles = StyleSheet.create({
   footerButtons: {
     flexDirection: 'row',
     gap: 12,
-    marginTop: 32,
     paddingHorizontal: 6,
   },
   navButtonCinza: {
