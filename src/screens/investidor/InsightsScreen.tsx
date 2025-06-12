@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function InsightsScreen() {
   const navigation = useNavigation();
@@ -104,6 +105,13 @@ export default function InsightsScreen() {
           />
         </View>
       </ScrollView>
+
+      <TouchableOpacity
+        style={styles.floatingButton}
+        onPress={() => navigation.navigate('IA')}
+      >
+        <Ionicons name="chatbubble-ellipses-outline" size={26} color="#fff" />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -175,5 +183,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
     marginVertical: 20,
     width: '100%',
+  },
+  floatingButton: {
+    position: 'absolute',
+    bottom: 28,
+    right: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#007AFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 5,
   },
 });

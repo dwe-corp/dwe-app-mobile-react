@@ -6,7 +6,10 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
 interface PortfolioData {
   valorTotal?: number;
@@ -23,11 +26,11 @@ interface PortfolioData {
 export default function PortfolioScreen() {
   const [data, setData] = useState<PortfolioData | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchData = async () => {
       await new Promise((res) => setTimeout(res, 1500));
-
       const result = {
         valorTotal: undefined,
         crescimento: undefined,
@@ -39,7 +42,6 @@ export default function PortfolioScreen() {
           liquidez: undefined,
         },
       };
-
       setData(result);
       setLoading(false);
     };
@@ -99,10 +101,10 @@ export default function PortfolioScreen() {
           <View style={[styles.bar, { height: (alocacao.liquidez ?? 5) + 20 }]} />
         </View>
         <View style={styles.chartLabels}>
-          <Text style={styles.chartLabel} numberOfLines={1} ellipsizeMode="tail">Ações</Text>
-          <Text style={styles.chartLabel} numberOfLines={1} ellipsizeMode="tail">Renda Fixa</Text>
-          <Text style={styles.chartLabel} numberOfLines={1} ellipsizeMode="tail">Imóveis</Text>
-          <Text style={styles.chartLabel} numberOfLines={1} ellipsizeMode="tail">Liquidez</Text>
+          <Text style={styles.chartLabel} numberOfLines={1}>Ações</Text>
+          <Text style={styles.chartLabel} numberOfLines={1}>Renda Fixa</Text>
+          <Text style={styles.chartLabel} numberOfLines={1}>Imóveis</Text>
+          <Text style={styles.chartLabel} numberOfLines={1}>Liquidez</Text>
         </View>
 
         <View style={styles.separator} />
@@ -137,6 +139,14 @@ export default function PortfolioScreen() {
           </View>
         </View>
       </ScrollView>
+
+      {/* Botão flutuante de IA */}
+      <TouchableOpacity
+        style={styles.floatingButton}
+        onPress={() => navigation.navigate('IA')}
+      >
+        <Ionicons name="chatbubble-ellipses-outline" size={26} color="#fff" />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -242,16 +252,24 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#333',
   },
-  centered: {
+  loadingContainer: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 24,
+    alignItems: 'center',
+    paddingHorizontal: 32,
+    backgroundColor: '#FAFAFA',
   },
-  loadingText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: '#666',
+  loadingTitle: {
+    marginTop: 20,
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+  },
+  loadingSubtitle: {
+    fontSize: 14,
+    color: '#888',
+    marginTop: 6,
+    textAlign: 'center',
   },
   separator: {
     height: 1,
@@ -259,23 +277,20 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     width: '100%',
   },
-loadingContainer: {
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  paddingHorizontal: 32,
-  backgroundColor: '#FAFAFA',
-},
-loadingTitle: {
-  marginTop: 20,
-  fontSize: 18,
-  fontWeight: '600',
-  color: '#333',
-},
-loadingSubtitle: {
-  fontSize: 14,
-  color: '#888',
-  marginTop: 6,
-  textAlign: 'center',
-}
+  floatingButton: {
+    position: 'absolute',
+    bottom: 28,
+    right: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#007AFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 5,
+  },
 });
