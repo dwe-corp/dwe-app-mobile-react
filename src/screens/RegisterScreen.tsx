@@ -106,11 +106,12 @@ export default function RegisterScreen({ navigation }) {
         <CustomButton title="Criar Conta" onPress={handleRegister} />
 
         {/* Link: Já é usuário? Entrar */}
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.linkBottom}>
-            Já é usuário? <Text style={styles.linkHighlight}>Entrar</Text>
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.bottomLinkContainer}>
+          <Text style={styles.linkBottom}>Já é usuário? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+            <Text style={styles.linkHighlight}>Entrar</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -124,30 +125,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f2f2',
     paddingTop: Platform.OS === 'web' ? 60 : 40,
   },
-  backButton: {
-    position: 'absolute',
-    top: Platform.OS === 'web' ? 24 : 40,
-    left: 24,
-    backgroundColor: '#E6F0FF',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    zIndex: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  backText: {
-    color: '#007AFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
   card: {
     backgroundColor: '#fff',
     padding: 24,
-    borderRadius: 12,
+    borderRadius: 16,
     width: '90%',
     maxWidth: 400,
     shadowColor: '#000',
@@ -163,12 +144,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: '#ccc',
-    padding: 12,
-    marginBottom: 6,
-    borderRadius: 8,
+    paddingVertical: 14,
+    paddingHorizontal: 12,
+    marginBottom: 10,
+    borderRadius: 12,
     backgroundColor: '#f9f9f9',
+    fontSize: 15,
   },
   inputError: {
     borderColor: '#cc0000',
@@ -177,15 +160,15 @@ const styles = StyleSheet.create({
   perfilContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   perfilButton: {
     flex: 1,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: '#ccc',
-    borderRadius: 8,
-    paddingVertical: 12,
-    marginHorizontal: 5,
+    borderRadius: 12,
+    paddingVertical: 14,
+    marginHorizontal: 6,
     backgroundColor: '#f9f9f9',
     alignItems: 'center',
   },
@@ -214,14 +197,20 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginBottom: 4,
   },
-  linkBottom: {
+  bottomLinkContainer: {
     marginTop: 16,
-    textAlign: 'center',
-    color: '#666',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  linkBottom: {
     fontSize: 14,
+    color: '#666',
   },
   linkHighlight: {
+    fontSize: 14,
     color: '#007bff',
     fontWeight: '600',
-  }
+  },
 });

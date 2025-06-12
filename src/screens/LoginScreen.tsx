@@ -62,9 +62,9 @@ export default function LoginScreen({ navigation }) {
           onChangeText={setSenha}
         />
 
-        {/* <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+        {/* {<TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
           <Text style={styles.linkRight}>Esqueceu a senha?</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>} */}
 
         {Object.values(errors).length > 0 && (
           <View style={styles.errorBox}>
@@ -76,11 +76,14 @@ export default function LoginScreen({ navigation }) {
 
         <CustomButton title="Entrar" onPress={handleLogin} />
 
-        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+        <View style={styles.bottomLinkContainer}>
           <Text style={styles.linkBottom}>
-            Primeira vez por aqui? <Text style={styles.linkHighlight}>Cadastre-se</Text>
+            Primeira vez por aqui?{' '}
           </Text>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.linkHighlight}>Cadastre-se</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -129,13 +132,19 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginBottom: 12,
   },
-  linkBottom: {
+  bottomLinkContainer: {
     marginTop: 16,
-    textAlign: 'center',
-    color: '#666',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  linkBottom: {
     fontSize: 14,
+    color: '#666',
   },
   linkHighlight: {
+    fontSize: 14,
     color: '#007bff',
     fontWeight: '600',
   },
