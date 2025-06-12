@@ -151,6 +151,12 @@ App.tsx                   # Entrada principal da aplicação
 
 ---
 
+### ▶️ Tela de Chat - IA
+
+![Perfil](./assets/IA.png)
+
+---
+
 ## 📝 Licença
 
 Este projeto é acadêmico e sem fins lucrativos. Todos os direitos reservados aos autores.
