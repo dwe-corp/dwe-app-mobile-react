@@ -12,6 +12,8 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { getUserRiskProfile } from '../../services/suitabilityService';
+import { getPortfolioSummary } from '../../services/portfolioService';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function DashboardScreen() {
   const { userName, userEmail } = useAuth();
@@ -20,52 +22,43 @@ export default function DashboardScreen() {
 
   const [perfil, setPerfil] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [summary, setSummary] = useState<{ total?: number; updatedAt?: string } | null>(null);
+  const [showValues, setShowValues] = useState(true);
 
   useEffect(() => {
-    const fetchPerfil = async () => {
+    const fetchData = async () => {
       if (!userEmail) return;
 
       setLoading(true);
       try {
         const perfilRisco = await getUserRiskProfile(userEmail);
         setPerfil(perfilRisco);
+        
+        //TO-DO: Criar a API
+        //const portfolioData = await getPortfolioSummary(userEmail);
+        //setSummary(portfolioData);
       } catch (error) {
-        console.log('Usuário ainda não tem perfil registrado.');
+        console.log('Erro ao buscar perfil ou resumo');
         setPerfil(null);
+        setSummary(null);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPerfil();
+    fetchData();
   }, [userEmail, isFocused]);
 
   const getPerfilStyle = (perfil: string | undefined | null) => {
     switch (perfil?.toUpperCase()) {
       case 'CONSERVADOR':
-        return {
-          backgroundColor: '#E8F5E9',
-          borderColor: '#A5D6A7',
-          color: '#2E7D32',
-        };
+        return { backgroundColor: '#E8F5E9', borderColor: '#A5D6A7', color: '#2E7D32' };
       case 'MODERADO':
-        return {
-          backgroundColor: '#FFF8E1',
-          borderColor: '#FFE082',
-          color: '#F57F17',
-        };
+        return { backgroundColor: '#FFF8E1', borderColor: '#FFE082', color: '#F57F17' };
       case 'AGRESSIVO':
-        return {
-          backgroundColor: '#FFEBEE',
-          borderColor: '#EF9A9A',
-          color: '#C62828',
-        };
+        return { backgroundColor: '#FFEBEE', borderColor: '#EF9A9A', color: '#C62828' };
       default:
-        return {
-          backgroundColor: '#E6F0FF',
-          borderColor: '#B0D4FF',
-          color: '#007AFF',
-        };
+        return { backgroundColor: '#E6F0FF', borderColor: '#B0D4FF', color: '#007AFF' };
     }
   };
 
@@ -102,6 +95,19 @@ export default function DashboardScreen() {
 
   const perfilStyle = getPerfilStyle(perfil);
 
+  const formatCurrency = (value?: number) =>
+    value !== undefined ? `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'Indisponível';
+
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return 'Indisponível';
+    const date = new Date(dateString);
+    return `Atualizado em ${date.toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    })}`;
+  };
+
   if (loading) {
     return (
       <SafeAreaView style={styles.safeContainer}>
@@ -119,55 +125,57 @@ export default function DashboardScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.topBar}>
           <Text style={styles.header} numberOfLines={1} ellipsizeMode="tail">
-            Olá, {(userName?.split(' ')[0]) || 'Investidor'}
+            Olá, {userName?.split(' ')[0] || 'Investidor'}
           </Text>
 
           <View style={styles.rightButtons}>
             {perfil ? (
-              <View
-                style={[
-                  styles.perfilBadge,
-                  {
-                    backgroundColor: perfilStyle.backgroundColor,
-                    borderColor: perfilStyle.borderColor,
-                  },
-                ]}
-              >
+              <View style={[styles.perfilBadge, { backgroundColor: perfilStyle.backgroundColor, borderColor: perfilStyle.borderColor }]}>
                 <Text style={[styles.perfilText, { color: perfilStyle.color }]}>
                   Perfil: {perfil}
                 </Text>
               </View>
             ) : (
-              <View
-                style={[
-                  styles.perfilBadge,
-                  { backgroundColor: '#f0f0f0', borderColor: '#ccc' },
-                ]}
-              >
-                <Text style={[styles.perfilText, { color: '#888' }]}>
-                  Perfil não definido
-                </Text>
+              <View style={[styles.perfilBadge, { backgroundColor: '#f0f0f0', borderColor: '#ccc' }]}>
+                <Text style={[styles.perfilText, { color: '#888' }]}>Perfil não definido</Text>
               </View>
             )}
           </View>
         </View>
 
+        {/* Resumo com botão de ocultar */}
+        <View style={styles.summaryBox}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.summaryLabel}>Patrimônio</Text>
+            <Text style={styles.summaryValue}>
+              {showValues ? formatCurrency(summary?.total) : '••••••••'}
+            </Text>
+            <Text style={styles.summaryDate}>{formatDate(summary?.updatedAt)}</Text>
+          </View>
+          <TouchableOpacity onPress={() => setShowValues(!showValues)}>
+            <Ionicons
+              name={showValues ? 'eye-outline' : 'eye-off-outline'}
+              size={24}
+              color="#333"
+            />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.separator} />
+
+        {/* Cards */}
         {cards.map((item, idx) => (
           <React.Fragment key={idx}>
             <View style={styles.cardRow}>
               <View style={styles.cardText}>
                 <Text style={styles.cardTitle}>{item.title}</Text>
                 <Text style={styles.cardDescription}>{item.desc}</Text>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={() => navigation.navigate(item.route)}
-                >
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(item.route)}>
                   <Text style={styles.buttonText}>{item.button}</Text>
                 </TouchableOpacity>
               </View>
               <Image source={item.image} style={styles.cardImage} />
             </View>
-
             {idx !== cards.length - 1 && <View style={styles.separator} />}
           </React.Fragment>
         ))}
@@ -177,6 +185,34 @@ export default function DashboardScreen() {
 }
 
 const styles = StyleSheet.create({
+  summaryBox: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  summaryLabel: {
+    fontSize: 14,
+    color: '#888',
+  },
+  summaryValue: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#111',
+    marginVertical: 4,
+  },
+  summaryDate: {
+    fontSize: 12,
+    color: '#666',
+  },
   safeContainer: {
     flex: 1,
     backgroundColor: '#FAFAFA',
@@ -273,23 +309,23 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     width: '100%',
   },
-loadingContainer: {
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  paddingHorizontal: 32,
-  backgroundColor: '#FAFAFA',
-},
-loadingTitle: {
-  marginTop: 20,
-  fontSize: 18,
-  fontWeight: '600',
-  color: '#333',
-},
-loadingSubtitle: {
-  fontSize: 14,
-  color: '#888',
-  marginTop: 6,
-  textAlign: 'center',
-}
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 32,
+    backgroundColor: '#FAFAFA',
+  },
+  loadingTitle: {
+    marginTop: 20,
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+  },
+  loadingSubtitle: {
+    fontSize: 14,
+    color: '#888',
+    marginTop: 6,
+    textAlign: 'center',
+  },
 });
