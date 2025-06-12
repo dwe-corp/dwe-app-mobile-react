@@ -145,6 +145,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
+    paddingTop: Platform.OS === 'web' ? 24 : 0,
     paddingBottom: 10,
     paddingHorizontal: 20,
     flexDirection: 'row',
