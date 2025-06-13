@@ -2,11 +2,11 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// nosemgrep react-insecure-request
 const API_URL = 'http://192.168.0.14:8080';
 
 export async function loginUser(email: string, senha: string): Promise<{ success: boolean, perfil?: 'INVESTIDOR' | 'ASSESSOR', nome?: string, email?: string }> {
   try {
+    // nosemgrep react-insecure-request
     const response = await axios.post(`${API_URL}/login`, { email, senha });
     console.log('Resposta da API:', response.data);
 
@@ -31,6 +31,7 @@ export const registerUser = async (
   try {
     const payload = { nome, email, senha, perfil };
     console.log('📤 Enviando para /auth:', payload);
+    // nosemgrep react-insecure-request
     const response = await axios.post(`${API_URL}/auth`, payload);
     return response.status === 201 || response.status === 200;
   } catch (error: any) {

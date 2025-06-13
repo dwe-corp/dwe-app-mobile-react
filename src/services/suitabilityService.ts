@@ -16,7 +16,6 @@ export const registerUserSuitability = async (
       respostasAgressivas,
     };
 
-    // nosemgrep react-insecure-request
     const response = await api.post('http://192.168.0.14:8082/suitability', payload);
     const success = response.status === 201 || response.status === 200;
 
@@ -35,7 +34,6 @@ export const registerUserSuitability = async (
 
 export const getUserRiskProfile = async (email: string): Promise<string | null> => {
   try {
-    // nosemgrep react-insecure-request
     const response = await api.get(`http://192.168.0.14:8082/suitability?email=${email}`);
     console.log('Resposta da API de perfil de risco:', response.data);
 
