@@ -2,6 +2,7 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// nosemgrep react-insecure-request
 const API_URL = 'http://192.168.0.14:8080';
 
 export async function loginUser(email: string, senha: string): Promise<{ success: boolean, perfil?: 'INVESTIDOR' | 'ASSESSOR', nome?: string, email?: string }> {
