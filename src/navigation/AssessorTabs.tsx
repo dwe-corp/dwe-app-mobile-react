@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from '../screens/assessor/HomeScreen';
 import ClientesScreen from '../screens/assessor/ClientesScreen';
 import InvestimentosScreen from '../screens/assessor/InvestimentosScreen';
-import ConfiguracoesScreen from '../screens/assessor/ConfiguracoesScreen';
+import PerfilScreen from '../screens/assessor/PerfilScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,9 +18,10 @@ export default function AssessorTabs() {
           let iconName = 'ellipse-outline';
 
           if (route.name === 'Home') iconName = 'home-outline';
+          else if (route.name === 'portfólio') iconName = 'stats-chart-outline';
           else if (route.name === 'Clientes') iconName = 'people-outline';
-          else if (route.name === 'Investimentos') iconName = 'bar-chart-outline';
-          else if (route.name === 'Configurações') iconName = 'settings-outline';
+          else if (route.name === 'Insights') iconName = 'analytics-outline';
+          else if (route.name === 'Perfil') iconName = 'person-outline';
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -30,9 +31,10 @@ export default function AssessorTabs() {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="portfólio" component={ClientesScreen} />
       <Tab.Screen name="Clientes" component={ClientesScreen} />
-      <Tab.Screen name="Investimentos" component={InvestimentosScreen} />
-      <Tab.Screen name="Configurações" component={ConfiguracoesScreen} />
+      <Tab.Screen name="Insights" component={InvestimentosScreen} />
+      <Tab.Screen name="Perfil" component={PerfilScreen} />
     </Tab.Navigator>
   );
 }
