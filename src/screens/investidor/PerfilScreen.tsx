@@ -22,22 +22,28 @@ export default function ProfileScreen() {
   const navigation = useNavigation();
 
   useEffect(() => {
+    let cancelled = false;
+  
     const fetchPerfil = async () => {
-      if (!userEmail) return;
-
-      setLoading(true);
+      if (!userEmail) {                 // evita travar o loading
+        if (!cancelled) setLoading(false);
+        return;
+      }
+  
+      if (!cancelled) setLoading(true);
       try {
         const perfilRisco = await getUserRiskProfile(userEmail);
-        setRiskProfile(perfilRisco);
-      } catch (error) {
-        console.log('Erro ao buscar perfil de risco');
-        setRiskProfile(null);
+        if (!cancelled) setRiskProfile(perfilRisco ?? null);
+      } catch (e) {
+        console.log('Erro ao buscar perfil de risco', e);
+        if (!cancelled) setRiskProfile(null);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
-
+  
     fetchPerfil();
+    return () => { cancelled = true; };
   }, [userEmail, isFocused]);
 
   if (loading) {

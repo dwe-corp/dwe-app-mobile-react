@@ -26,27 +26,36 @@ export default function DashboardScreen() {
   const [showValues, setShowValues] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
+  
     const fetchData = async () => {
-      if (!userEmail) return;
-
-      setLoading(true);
+      // se o usuário ainda não foi carregado, não deixe o spinner travado
+      if (!userEmail) {
+        if (!cancelled) setLoading(false);
+        return;
+      }
+  
+      if (!cancelled) setLoading(true);
       try {
         const perfilRisco = await getUserRiskProfile(userEmail);
-        setPerfil(perfilRisco);
-        
-        //TO-DO: Criar a API
-        //const portfolioData = await getPortfolioSummary(userEmail);
-        //setSummary(portfolioData);
-      } catch (error) {
-        console.log('Erro ao buscar perfil ou resumo');
-        setPerfil(null);
-        setSummary(null);
+        if (!cancelled) setPerfil(perfilRisco);
+  
+        // TO-DO:
+        // const portfolioData = await getPortfolioSummary(userEmail);
+        // if (!cancelled) setSummary(portfolioData);
+      } catch (e) {
+        console.log('Erro ao buscar perfil ou resumo', e);
+        if (!cancelled) {
+          setPerfil(null);
+          setSummary(null);
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
-
+  
     fetchData();
+    return () => { cancelled = true; };
   }, [userEmail, isFocused]);
 
   const getPerfilStyle = (perfil: string | undefined | null) => {
