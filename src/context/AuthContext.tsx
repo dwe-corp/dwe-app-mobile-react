@@ -1,12 +1,14 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+type Perfil = 'INVESTIDOR' | 'ASSESSOR';
+
 interface AuthContextType {
   isAuthenticated: boolean;
-  userProfile: 'INVESTIDOR' | 'ASSESSOR' | null;
+  userProfile: Perfil | null;
   userName: string | null;
   userEmail: string | null;
-  login: (profile: 'INVESTIDOR' | 'ASSESSOR', nome: string, email: string) => Promise<void>;
+  login: (profile: Perfil, nome: string, email: string) => Promise<void>;
   logout: () => Promise<void>;
   loading: boolean;
 }
@@ -18,31 +20,33 @@ const AuthContext = createContext<AuthContextType>({
   userEmail: null,
   login: async () => {},
   logout: async () => {},
-  loading: true
+  loading: true,
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userProfile, setUserProfile] = useState<'INVESTIDOR' | 'ASSESSOR' | null>(null);
+  const [userProfile, setUserProfile] = useState<Perfil | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
-      const token = await AsyncStorage.getItem('token');
-      const profile = await AsyncStorage.getItem('profile');
-      const nome = await AsyncStorage.getItem('nome');
-      const email = await AsyncStorage.getItem('email');
+      const [[, token], [, profile], [, nome], [, email]] = await AsyncStorage.multiGet(
+        ['token', 'profile', 'nome', 'email']
+      );
 
+      // Mantém a regra atual baseada em token (já que salvamos o token no loginUser)
       setIsAuthenticated(!!token);
 
       if (profile === 'INVESTIDOR' || profile === 'ASSESSOR') {
-        setUserProfile(profile);
+        setUserProfile(profile as Perfil);
+      } else {
+        setUserProfile(null);
       }
 
-      if (nome) setUserName(nome);
-      if (email) setUserEmail(email);
+      setUserName(nome ?? null);
+      setUserEmail(email ?? null);
 
       setLoading(false);
     };
@@ -50,21 +54,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loadData();
   }, []);
 
-  const login = async (profile: 'INVESTIDOR' | 'ASSESSOR', nome: string, email: string) => {
-    await AsyncStorage.setItem('profile', profile);
-    await AsyncStorage.setItem('nome', nome);
-    await AsyncStorage.setItem('email', email);
+  const login = async (profile: Perfil, nome: string, email: string) => {
+    await AsyncStorage.multiSet([
+      ['profile', profile],
+      ['nome', nome ?? ''],
+      ['email', email ?? ''],
+    ]);
+
     setUserProfile(profile);
-    setUserName(nome);
-    setUserEmail(email);
+    setUserName(nome ?? '');
+    setUserEmail(email ?? '');
     setIsAuthenticated(true);
   };
 
   const logout = async () => {
-    await AsyncStorage.removeItem('token');
-    await AsyncStorage.removeItem('profile');
-    await AsyncStorage.removeItem('nome');
-    await AsyncStorage.removeItem('email');
+    await AsyncStorage.multiRemove(['token', 'profile', 'nome', 'email']);
     setIsAuthenticated(false);
     setUserProfile(null);
     setUserName(null);

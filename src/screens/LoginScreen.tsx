@@ -30,9 +30,13 @@ export default function LoginScreen({ navigation }) {
     }
 
     setErrors({});
+
     const result = await loginUser(email, senha);
     if (result.success && result.perfil) {
-      login(result.perfil, result.nome, result.email);
+      // result.nome/email já vêm normalizados pelo service e também persistidos no AsyncStorage
+      await login(result.perfil, result.nome ?? '', result.email ?? email);
+      // navegue para sua home, se desejar:
+      // navigation.replace('HomeTabs');  // exemplo
     } else {
       setErrors({ geral: 'Credenciais inválidas ou perfil não encontrado.' });
     }

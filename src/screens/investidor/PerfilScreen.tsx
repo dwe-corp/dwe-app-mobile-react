@@ -21,6 +21,8 @@ export default function ProfileScreen() {
   const isFocused = useIsFocused();
   const navigation = useNavigation();
 
+  console.log('[ProfileScreen] recebido do AuthContext:', { userName, userEmail, userProfile });
+
   useEffect(() => {
     let cancelled = false;
   
