@@ -7,25 +7,36 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function ProfileScreen() {
-  const { userName, userEmail, userProfile, logout } = useAuth();
+  const { userName, userEmail, userProfile, logout, loading } = useAuth();
   const navigation = useNavigation();
+
+  // Segura a UI enquanto o AuthContext restaura token/profile/nome/email do AsyncStorage
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.safeContainer}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" />
+          <Text style={styles.loadingTitle}>Carregando perfil...</Text>
+          <Text style={styles.loadingSubtitle}>Estamos buscando suas informações.</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeContainer}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Image
-          source={require('../../assets/avatar.png')}
-          style={styles.avatar}
-        />
+        <Image source={require('../../assets/avatar.png')} style={styles.avatar} />
 
-        <Text style={styles.name}>{userName}</Text>
-        <Text style={styles.role}>{userProfile}</Text>
+        <Text style={styles.name}>{userName ?? '—'}</Text>
+        <Text style={styles.role}>{userProfile ?? '—'}</Text>
 
         <View style={styles.separator} />
 
@@ -34,7 +45,7 @@ export default function ProfileScreen() {
           <View style={{ flex: 1 }}>
             <Text style={styles.optionLabel}>Email</Text>
             <Text style={styles.optionValue} numberOfLines={1} ellipsizeMode="tail">
-              {userEmail}
+              {userEmail ?? '—'}
             </Text>
           </View>
         </View>
