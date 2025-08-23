@@ -12,6 +12,8 @@ import {
   TextInput,
   FlatList,
   Pressable,
+  Easing,
+  Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -117,7 +119,7 @@ function ChartTypeSwitch({
   );
 }
 
-/** ---------- Seletor de Escopo (badge cinza) ---------- */
+/** ---------- Seletor de Escopo (badge cinza + animações) ---------- */
 function ScopeSelector({
   scope,
   onChange,
@@ -141,79 +143,197 @@ function ScopeSelector({
     return clients.filter(c => c.nome.toLowerCase().includes(q));
   }, [clients, query]);
 
+  // animação de “press” na badge
+  const pressScale = useRef(new Animated.Value(1)).current;
+  const handlePressIn = () => {
+    Animated.spring(pressScale, {
+      toValue: 0.96,
+      useNativeDriver: true,
+      speed: 30,
+      bounciness: 0,
+    }).start();
+  };
+  const handlePressOut = () => {
+    Animated.spring(pressScale, {
+      toValue: 1,
+      useNativeDriver: true,
+      speed: 30,
+      bounciness: 6,
+    }).start();
+  };
+
+  // animação do modal (fade + slide-up)
+  const overlay = useRef(new Animated.Value(0)).current; // 0 fechado, 1 aberto
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      Animated.timing(overlay, {
+        toValue: 1,
+        duration: 180,
+        useNativeDriver: true,
+        easing: Easing.out(Easing.quad),
+      }).start();
+    }
+  }, [open, overlay]);
+
+  const closeModal = () => {
+    Animated.timing(overlay, {
+      toValue: 0,
+      duration: 160,
+      useNativeDriver: true,
+      easing: Easing.in(Easing.quad),
+    }).start(({ finished }) => {
+      if (finished) {
+        setOpen(false);
+        setMounted(false);
+        setQuery('');
+      }
+    });
+  };
+
+  const overlayStyle = {
+    opacity: overlay,
+  };
+  const cardStyle = {
+    transform: [
+      {
+        translateY: overlay.interpolate({
+          inputRange: [0, 1],
+          outputRange: [24, 0],
+        }),
+      },
+      {
+        scale: overlay.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0.98, 1],
+        }),
+      },
+    ],
+  };
+
   return (
     <>
-      {/* PILL cinza (igual Home quando 0 clientes) */}
-      <Pressable
-        onPress={() => setOpen(true)}
-        style={styles.scopeBadge}
-        android_ripple={{ color: 'rgba(0,0,0,0.08)' }}
+      {/* PILL cinza (igual Home quando 0 clientes) + animação */}
+      <Animated.View style={{ transform: [{ scale: pressScale }] }}>
+        <Pressable
+          onPress={() => setOpen(true)}
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
+          style={styles.scopeBadge}
+          android_ripple={{ color: 'rgba(0,0,0,0.08)', borderless: false }}
+        >
+          <Ionicons
+            name={scope.type === 'all' ? 'globe-outline' : 'person-outline'}
+            size={16}
+            color="#888"
+            style={{ marginRight: 6 }}
+          />
+          <Text numberOfLines={1} style={styles.scopeBadgeText}>
+            {label}
+          </Text>
+          <Ionicons name="chevron-down" size={16} color="#888" />
+        </Pressable>
+      </Animated.View>
+
+      {/* Modal com fade + slide-up e título centralizado */}
+      <Modal
+        visible={open}
+        animationType="none"
+        transparent
+        onRequestClose={closeModal}
       >
-        <Ionicons
-          name={scope.type === 'all' ? 'globe-outline' : 'person-outline'}
-          size={16}
-          color="#888"
-          style={{ marginRight: 6 }}
-        />
-        <Text numberOfLines={1} style={styles.scopeBadgeText}>
-          {label}
-        </Text>
-        <Ionicons name="chevron-down" size={16} color="#888" />
-      </Pressable>
-
-      {/* Modal simples para escolher o escopo */}
-      <Modal visible={open} animationType="fade" transparent onRequestClose={() => setOpen(false)}>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalCard}>
-            <View style={styles.modalHeaderRow}>
-              <Text style={styles.modalTitle}>Selecionar escopo</Text>
-              <Pressable onPress={() => setOpen(false)} hitSlop={10}>
-                <Ionicons name="close" size={22} color="#666" />
-              </Pressable>
-            </View>
-
-            <Pressable
-              style={styles.optionRow}
-              onPress={() => { onChange({ type: 'all' }); setOpen(false); }}
-            >
-              <Ionicons name="globe-outline" size={18} color="#111" />
-              <Text style={styles.optionText}>Geral (todas carteiras)</Text>
-            </Pressable>
-
-            <View style={styles.searchBox}>
-              <Ionicons name="search-outline" size={16} color="#888" />
-              <TextInput
-                value={query}
-                onChangeText={setQuery}
-                placeholder="Buscar cliente"
-                placeholderTextColor="#aaa"
-                style={styles.searchInput}
-                autoCapitalize="none"
-              />
-            </View>
-
-            <FlatList
-              data={filtered}
-              keyExtractor={(c) => c.id}
-              style={{ maxHeight: 260 }}
-              ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
-              renderItem={({ item }) => (
-                <Pressable
-                  style={styles.optionRow}
-                  onPress={() => { onChange({ type: 'client', id: item.id }); setOpen(false); }}
-                >
-                  <Ionicons name="person-outline" size={18} color="#111" />
-                  <Text style={styles.optionText}>{item.nome}</Text>
-                </Pressable>
-              )}
-              ListEmptyComponent={
-                <Text style={{ textAlign: 'center', color: '#888', marginTop: 8 }}>
-                  Nenhum cliente encontrado
+        <Animated.View style={[styles.modalOverlay, overlayStyle]}>
+          {mounted && (
+            <Animated.View style={[styles.modalCard, cardStyle]}>
+              {/* header com título centralizado e X à direita */}
+              <View style={styles.modalHeaderRow}>
+                <View style={{ width: 24 }} />{/* placeholder p/ centralizar o título */}
+                <Text style={styles.modalTitle} numberOfLines={1}>
+                  Selecionar escopo
                 </Text>
-              }
-            />
-          </View>
-        </View>
+                <Pressable onPress={closeModal} hitSlop={10} style={styles.closeBtn}>
+                  <Ionicons name="close" size={22} color="#666" />
+                </Pressable>
+              </View>
+
+              {/* subheader opcional */}
+              <Text style={styles.modalSubtitle}>
+                Filtre por cliente ou selecione o modo geral.
+              </Text>
+
+              <Pressable
+                style={[styles.optionRow, styles.optionRowFirst]}
+                onPress={() => { onChange({ type: 'all' }); closeModal(); }}
+                android_ripple={{ color: 'rgba(0,0,0,0.06)' }}
+              >
+                <View style={styles.optionLeft}>
+                  <View style={styles.optionIconWrap}>
+                    <Ionicons name="globe-outline" size={18} color="#333" />
+                  </View>
+                  <Text style={styles.optionText}>Geral (todas carteiras)</Text>
+                </View>
+                {scope.type === 'all' && (
+                  <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
+                )}
+              </Pressable>
+
+              {/* caixa de busca */}
+              <View style={styles.searchBox}>
+                <Ionicons name="search-outline" size={16} color="#888" />
+                <TextInput
+                  value={query}
+                  onChangeText={setQuery}
+                  placeholder="Buscar cliente"
+                  placeholderTextColor="#aaa"
+                  style={styles.searchInput}
+                  autoCapitalize="none"
+                  returnKeyType="search"
+                />
+                {!!query && (
+                  <Pressable onPress={() => setQuery('')} hitSlop={8}>
+                    <Ionicons name="close-circle" size={18} color="#bbb" />
+                  </Pressable>
+                )}
+              </View>
+
+              <FlatList
+                data={filtered}
+                keyExtractor={(c) => c.id}
+                style={{ maxHeight: 300 }}
+                keyboardShouldPersistTaps="handled"
+                ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
+                renderItem={({ item }) => {
+                  const selected = scope.type === 'client' && scope.id === item.id;
+                  return (
+                    <Pressable
+                      style={[styles.optionRow, selected && styles.optionRowSelected]}
+                      onPress={() => { onChange({ type: 'client', id: item.id }); closeModal(); }}
+                      android_ripple={{ color: 'rgba(0,0,0,0.06)' }}
+                    >
+                      <View style={styles.optionLeft}>
+                        <View style={styles.optionIconWrap}>
+                          <Ionicons name="person-outline" size={18} color="#333" />
+                        </View>
+                        <Text style={styles.optionText}>{item.nome}</Text>
+                      </View>
+                      {selected && (
+                        <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
+                      )}
+                    </Pressable>
+                  );
+                }}
+                ListEmptyComponent={
+                  <Text style={{ textAlign: 'center', color: '#888', marginTop: 12 }}>
+                    Nenhum cliente encontrado
+                  </Text>
+                }
+                contentContainerStyle={{ paddingBottom: 4 }}
+              />
+            </Animated.View>
+          )}
+        </Animated.View>
       </Modal>
     </>
   );
@@ -388,7 +508,7 @@ export default function PortfolioScreen() {
     <SafeAreaView style={styles.safeContainer}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
 
-        {/* Linha: "Desempenho" + escopo (badge cinza) */}
+        {/* Linha: "Desempenho" + escopo (badge cinza com animação) */}
         <View style={styles.headerRow}>
           <Text style={[styles.sectionTitle, { marginTop: 12 }]}>Desempenho</Text>
           <View style={styles.headerActions}>
@@ -596,29 +716,76 @@ const styles = StyleSheet.create({
   },
   modalHeaderRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 6,
+    justifyContent: 'space-between',
+  },
+  modalTitle: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#111',
+  },
+  modalSubtitle: {
+    textAlign: 'center',
+    color: '#666',
+    fontSize: 12,
     marginBottom: 10,
   },
-  modalTitle: { fontSize: 18, fontWeight: '700', color: '#111' },
+  closeBtn: {
+    width: 24,
+    height: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   optionRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    paddingVertical: 10,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#EEE',
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    backgroundColor: '#FAFAFA',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: '#EEE',
+    marginBottom: 8,
+    justifyContent: 'space-between',
+    ...Platform.select({
+      android: { overflow: 'hidden' },
+    }),
+  },
+  optionRowFirst: {
+    marginTop: 2,
+  },
+  optionRowSelected: {
+    borderColor: '#C8E6C9',
+    backgroundColor: '#F2FFF3',
+  },
+  optionLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  optionIconWrap: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#EFEFEF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
   },
   optionText: { color: '#111', fontSize: 15, fontWeight: '600' },
   searchBox: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F5F6FA',
-    borderRadius: 10,
+    borderRadius: 12,
     paddingHorizontal: 10,
     paddingVertical: 8,
-    marginTop: 10,
-    marginBottom: 8,
+    marginTop: 8,
+    marginBottom: 10,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: '#ECEFF1',
   },
-  searchInput: { marginLeft: 6, flex: 1, color: '#333' },
+  searchInput: { marginLeft: 6, flex: 1, color: '#333', paddingVertical: Platform.OS === 'ios' ? 6 : 2 },
 });
