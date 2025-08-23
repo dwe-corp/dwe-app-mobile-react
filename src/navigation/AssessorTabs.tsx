@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
 import HomeScreen from '../screens/assessor/HomeScreen';
+import PortfolioScreen from '../screens/assessor/PortfolioScreen';
 import ClientesScreen from '../screens/assessor/ClientesScreen';
 import InvestimentosScreen from '../screens/assessor/InvestimentosScreen';
 import PerfilScreen from '../screens/assessor/PerfilScreen';
@@ -31,7 +32,7 @@ export default function AssessorTabs() {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="portfólio" component={ClientesScreen} />
+      <Tab.Screen name="portfólio" component={PortfolioScreen} />
       <Tab.Screen name="Clientes" component={ClientesScreen} />
       <Tab.Screen name="Insights" component={InvestimentosScreen} />
       <Tab.Screen name="Perfil" component={PerfilScreen} />
