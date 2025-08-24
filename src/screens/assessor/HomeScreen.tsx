@@ -90,14 +90,14 @@ export default function HomeScreen() {
       title: 'Ferramentas de Simulação',
       desc: 'Simule diferentes carteiras para mostrar aos seus clientes os possíveis cenários de retorno.',
       button: 'Simular Carteira',
-      route: 'Simulador',
+      route: 'SimuladorAssessor',
       image: require('../../assets/teste.png'),
     },
     {
       title: 'Lembretes Inteligentes',
       desc: 'Programe lembretes para reuniões, revisões de carteira e datas importantes.',
       button: 'Verificar Lembretes',
-      route: 'Lembretes',
+      route: 'LembretesAssessor',
       image: require('../../assets/news-home.png'),
     },
     {
