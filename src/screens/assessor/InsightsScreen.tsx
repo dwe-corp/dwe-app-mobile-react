@@ -44,7 +44,7 @@ export default function InsightsScreen() {
 
         <View style={styles.cardRow}>
           <View style={styles.cardText}>
-            <Text style={styles.cardTitle}>Portfólio</Text>
+            <Text style={styles.cardTitle}>Relatórios</Text>
             <Text style={styles.cardDescription}>
               Acesse relatórios detalhados de desempenho, incluindo alocação de ativos e retornos.
             </Text>

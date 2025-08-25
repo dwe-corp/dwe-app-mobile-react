@@ -17,7 +17,6 @@ import AssessorTabs from './src/navigation/AssessorTabs';
 import SimuladorAssessorScreen from './src/screens/assessor/funcionalidades/SimuladorAssessorScreen';
 import ChatScreen from './src/screens/assessor/funcionalidades/ChatScreen';
 import LembretesAssessorScreen from './src/screens/assessor/funcionalidades/LembretesAssessorScreen';
-import RelatoriosScreen from './src/screens/assessor/funcionalidades/RelatoriosScreen';
 
 import PerfilInvestidorScreen from './src/screens/investidor/funcionalidades/PerfilInvestidorScreen';
 import FundosScreen from './src/screens/investidor/funcionalidades/FundosScreen';
@@ -67,7 +66,6 @@ function AppRoutes() {
           <Stack.Screen name="SimuladorAssessor" component={SimuladorAssessorScreen} />
           <Stack.Screen name="Chat" component={ChatScreen} />
           <Stack.Screen name="LembretesAssessor" component={LembretesAssessorScreen} />
-          <Stack.Screen name="Relatorios" component={RelatoriosScreen} />
 
           {/* Telas extras do Investidor acessadas por botão */}
           <Stack.Screen name="PerfilInvestidor" component={PerfilInvestidorScreen} />
