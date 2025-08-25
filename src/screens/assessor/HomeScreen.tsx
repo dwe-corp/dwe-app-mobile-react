@@ -80,13 +80,6 @@ export default function HomeScreen() {
   // Cards no mesmo padrão do DashboardScreen (com imagem)
   const cards = [
     {
-      title: 'Relatórios de Clientes',
-      desc: 'Acesse relatórios completos dos portfólios dos seus clientes, incluindo performance, alocação e risco.',
-      button: 'Ver Relatórios',
-      route: 'Relatorios',
-      image: require('../../assets/chart-home.png'),
-    },
-    {
       title: 'Ferramentas de Simulação',
       desc: 'Simule diferentes carteiras para mostrar aos seus clientes os possíveis cenários de retorno.',
       button: 'Simular Carteira',
