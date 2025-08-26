@@ -17,8 +17,9 @@ export default function InsightsScreen() {
   return (
     <SafeAreaView style={styles.safeContainer}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.sectionTitle}>Panorama do Mercado</Text>
 
+        {/* Panorama do Mercado */}
+        <Text style={styles.sectionTitle}>Panorama do Mercado</Text>
         <View style={styles.cardRow}>
           <View style={styles.cardText}>
             <Text style={styles.cardTitle}>Boletim Semanal</Text>
@@ -27,21 +28,18 @@ export default function InsightsScreen() {
             </Text>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('AtualizacoesInvestidor')}
+              onPress={() => navigation.navigate('AtualizacoesInvestidor' as never)}
             >
               <Text style={styles.buttonText}>Leia Agora</Text>
             </TouchableOpacity>
           </View>
-          <Image
-            source={require('../../assets/news.png')}
-            style={styles.cardImage}
-          />
+          <Image source={require('../../assets/news.png')} style={styles.cardImage} />
         </View>
 
         <View style={styles.separator} />
 
+        {/* Indicadores de Performance */}
         <Text style={styles.sectionTitle}>Indicadores de Performance</Text>
-
         <View style={styles.cardRow}>
           <View style={styles.cardText}>
             <Text style={styles.cardTitle}>Relatórios</Text>
@@ -50,19 +48,17 @@ export default function InsightsScreen() {
             </Text>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('PortfolioInvestidor')}
+              onPress={() => navigation.navigate('PortfolioInvestidor' as never)}
             >
               <Text style={styles.buttonText}>Ver Relatórios</Text>
             </TouchableOpacity>
           </View>
-          <Image
-            source={require('../../assets/chart.png')}
-            style={styles.cardImage}
-          />
+          <Image source={require('../../assets/chart.png')} style={styles.cardImage} />
         </View>
 
         <View style={styles.separator} />
 
+        {/* Ferramentas */}
         <Text style={styles.sectionTitle}>Ferramentas</Text>
 
         <View style={styles.cardRow}>
@@ -73,18 +69,29 @@ export default function InsightsScreen() {
             </Text>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('SimuladorInvestidor')}
+              onPress={() => navigation.navigate('SimuladorInvestidor' as never)}
             >
               <Text style={styles.buttonText}>Simular</Text>
             </TouchableOpacity>
           </View>
-          <Image
-            source={require('../../assets/simulator.png')}
-            style={styles.cardImage}
-          />
+          <Image source={require('../../assets/simulator.png')} style={styles.cardImage} />
         </View>
 
-        <View style={styles.separator} />
+        <View style={styles.cardRow}>
+          <View style={styles.cardText}>
+            <Text style={styles.cardTitle}>Calculadora de Juros Compostos</Text>
+            <Text style={styles.cardDescription}>
+              Descubra como o tempo e a taxa de rendimento impactam o crescimento dos investimentos.
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('SimuladorAssessor' as never)}
+            >
+              <Text style={styles.buttonText}>Simular</Text>
+            </TouchableOpacity>
+          </View>
+          <Image source={require('../../assets/calculadora.png')} style={styles.cardImage} />
+        </View>
 
         <View style={styles.cardRow}>
           <View style={styles.cardText}>
@@ -94,22 +101,54 @@ export default function InsightsScreen() {
             </Text>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('LembretesInvestidor')}
+              onPress={() => navigation.navigate('LembretesInvestidor' as never)}
             >
               <Text style={styles.buttonText}>Criar Lembretes</Text>
             </TouchableOpacity>
           </View>
-          <Image
-            source={require('../../assets/reminder.png')}
-            style={styles.cardImage}
-          />
+          <Image source={require('../../assets/reminder.png')} style={styles.cardImage} />
+        </View>
+
+        <View style={styles.separator} />
+
+        {/* Comunicação */}
+        <Text style={styles.sectionTitle}>Comunicação</Text>
+
+        <View style={styles.cardRow}>
+          <View style={styles.cardText}>
+            <Text style={styles.cardTitle}>Suporte ao Cliente</Text>
+            <Text style={styles.cardDescription}>
+              Acompanhe o atendimento e envie mensagens personalizadas para seus clientes.
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('Chat' as never)}
+            >
+              <Text style={styles.buttonText}>Abrir Chat</Text>
+            </TouchableOpacity>
+          </View>
+          <Image source={require('../../assets/news-home.png')} style={styles.cardImage} />
+        </View>
+
+        <View style={styles.cardRow}>
+          <View style={styles.cardText}>
+            <Text style={styles.cardTitle}>Fale com a Nina</Text>
+            <Text style={styles.cardDescription}>
+              Assistente inteligente para apoiar suas decisões com seus clientes.
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('IA' as never)}
+            >
+              <Text style={styles.buttonText}>Conversar Agora</Text>
+            </TouchableOpacity>
+          </View>
+          <Image source={require('../../assets/robot.png')} style={styles.cardImage} />
         </View>
       </ScrollView>
 
-      <TouchableOpacity
-        style={styles.floatingButton}
-        onPress={() => navigation.navigate('IA')}
-      >
+      {/* Acesso rápido à IA */}
+      <TouchableOpacity style={styles.floatingButton} onPress={() => navigation.navigate('IA' as never)}>
         <Ionicons name="chatbubble-ellipses-outline" size={26} color="#fff" />
       </TouchableOpacity>
     </SafeAreaView>

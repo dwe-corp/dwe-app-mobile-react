@@ -410,7 +410,7 @@ export default function SimuladorAssessorScreen() {
             <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
               <Ionicons name="chevron-back" size={24} color="#111" />
             </TouchableOpacity>
-            <Text style={styles.header}>Ferramentas de Simulação</Text>
+            <Text style={styles.header}>Calculadora de Juros Compostos</Text>
             <TouchableOpacity onPress={onAjuda} style={{ padding: 6 }}>
               <Ionicons name="help-circle-outline" size={22} color="#111" />
             </TouchableOpacity>
