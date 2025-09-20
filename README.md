@@ -173,6 +173,36 @@ App.tsx                   # Entrada principal da aplicação
 
 ---
 
+### ▶️ Tela da Home - Assessor
+
+![Perfil](./assets/Home-Assessor.png)
+
+---
+
+### ▶️ Tela de Portfólio - Assessor
+
+![Perfil](./assets/Portfolio-Assessor.png)
+
+---
+
+### ▶️ Tela de Clientes - Assessor
+
+![Perfil](./assets/Clientes-Assessor.png)
+
+---
+
+### ▶️ Tela de Insights - Assessor
+
+![Perfil](./assets/Insights-Assessor.png)
+
+---
+
+### ▶️ Tela de NewsLetter
+
+![Perfil](./assets/NewsLetter.png)
+
+---
+
 ## 📝 Licença
 
 Este projeto é acadêmico e sem fins lucrativos. Todos os direitos reservados aos autores.
