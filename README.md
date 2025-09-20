@@ -175,31 +175,31 @@ App.tsx                   # Entrada principal da aplicação
 
 ### ▶️ Tela da Home - Assessor
 
-![Perfil](./assets/Home-Assessor.png)
+![Home-Assessor](./assets/Home-Assessor.png)
 
 ---
 
 ### ▶️ Tela de Portfólio - Assessor
 
-![Perfil](./assets/Portfolio-Assessor.png)
+![Portfolio-Assessor](./assets/Portfolio-Assessor.png)
 
 ---
 
 ### ▶️ Tela de Clientes - Assessor
 
-![Perfil](./assets/Clientes-Assessor.png)
+![Clientes-Assessor](./assets/Clientes-Assessor.png)
 
 ---
 
 ### ▶️ Tela de Insights - Assessor
 
-![Perfil](./assets/Insights-Assessor.png)
+![Insights-Assessor](./assets/Insights-Assessor.png)
 
 ---
 
 ### ▶️ Tela de NewsLetter
 
-![Perfil](./assets/NewsLetter.png)
+![NewsLetter](./assets/NewsLetter.png)
 
 ---
 
