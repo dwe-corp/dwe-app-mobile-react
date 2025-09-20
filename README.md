@@ -23,11 +23,27 @@ Este projeto é uma aplicação **React Native** com **AsyncStorage** que oferec
   - Alocação por classe de ativos
 - Acesso a insights de mercado com leitura de boletins
 - Simulador de portfólio e lembretes inteligentes
+- Assistente Virtual (Nina), com recursos de:
+  - Resumir portfólio
+  - Mostrar tendências atuais de mercado
+  - Analisar investimentos em ações de tecnologia
+  - Sugerir novas estratégias de investimento
+  - Explicar riscos de investimentos em cripto
+
 
 ### Para assessores:
-- Tela de clientes
-- Tela de investimentos
-- Tela de configurações
+- Dashboard com visão geral de aportes, resgates, eventos futuros e patrimônio
+- Gestão de clientes com lista de clientes e valores sob custódia
+- Calendário inteligente
+- Relatórios detalhados de desempenho e alocação de ativos dos clientes
+- Atualizações de mercado integradas (notícias e análises de fontes externas)
+- Assistente Virtual (Nina) para suporte em reuniões, com recursos de:
+  - Resumir portfólio do cliente
+  - Mostrar tendências atuais de mercado
+  - Analisar investimentos em ações de tecnologia
+  - Sugerir novas estratégias de investimento
+  - Explicar riscos de investimentos em cripto
+
 
 ### Recursos gerais:
 - Login e cadastro com persistência de sessão (JWT via AsyncStorage)
